@@ -18,5 +18,9 @@ Step3: py manage.py runserver
 6. git push
 7. PR -> GITHUB
 8. MERGE -> ADMIN
+--- MAIN PULL
+NEW BRANCH ^
 
 ```
+
+
