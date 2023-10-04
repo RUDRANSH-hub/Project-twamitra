@@ -49,4 +49,4 @@ def logoutuser(request):
 
 
 def dashboard(request):
-   return HttpResponse("logged in")
+   return render ( request, "dashboard.html")
