@@ -827,84 +827,10 @@ letter-spacing: 1px;
 {% endif %}
 
 
- {% if request.user.is_authenticated %}
 
 
-<div class="wrapper">
-  <div class="head-text">
-    Convert your Long Links into <br> Small and Fancy Links.
-  </div>
-  <div class="chat-box">
-    <div class="desc-text">
-      
-    </div>
-    <form action="/home" method="POST">
-       {% csrf_token %}
-    <div class="fieldtext">
-       Paste Your Long URL Here
-      </div>
-
-      <div class="field">
-        <input type="text" placeholder="Long URL" name="targeturl" required>
-
-      </div>
-
-      <div class="fieldtext">
-       Tail of Your choice
-      </div>
-      
-      <div class="fieldtext" style="font-size:13px; font-weight:400;">
-       Leave Blank for Random text.
-      </div>
-
-      <div class="field">
-        <input type="text" placeholder="Fancy Tail" pattern="[a-zA-Z0-9]+" minlength="6" name="alias" >
-      </div>
-       <div class="fieldtext" style="font-size:13px; color:red; margin-top: 6px; font-weight:400;">
-        Fill 6 or more Alphabets or Numbers Only!
-      </div>
-     
-      <div class="field">
-        <button type="submit"> Convert Link </button> 
-        
-      </div>
-     
-    </form>
-    
-    {% if request.user.is_authenticated %}
-     <div class="historytab">
-         <a  href="/auth/dashboard"> Go to Dashboard </a>
-        </div>
-      
-    
-    {% else %}
-      <div class="historytab">
-         <a  href="/history"> Your Previous Links </a>
-        </div>
-     {% endif %}
-
-  </div>
-
-</div>
 
 
-<script>
-var close = document.getElementsByClassName("btn-group");
-var i;
-
-for (i = 0; i < close.length; i++) {
-  close[i].onclick = function(){
-    var div = this.parentElement;
-    div.style.opacity = "0";
-    setTimeout(function(){ div.style.display = "none"; }, 600);
-  }
-}
-
-
-</script>
-
-
-{% else %}
 
 
 
@@ -938,7 +864,7 @@ for (i = 0; i < close.length; i++) {
               </a>
             </div>
           </form>
-          <form action="/auth/registeruser" method="POST" class="sign-up-form">
+          <form action="auth/registeruser" method="POST" class="sign-up-form">
             {% csrf_token %}
             <h2 class="title">Register to Continue</h2>
             <div class="input-field">
@@ -1026,7 +952,7 @@ sign_in_btn.addEventListener("click", () => {
   container.classList.remove("sign-up-mode");
 });
     </script>
- {% endif %}
+ 
 
 
 
