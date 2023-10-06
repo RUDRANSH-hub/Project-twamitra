@@ -1,0 +1,345 @@
+{% extends 'base2.html' %}
+
+{% block title %} Loan {% endblock title %}
+ 
+ {% block titleactive1 %} active {% endblock titleactive1 %} 
+
+{% block headthing %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script
+        src="https://kit.fontawesome.com/64d58efce2.js"
+        crossorigin="anonymous"
+      ></script>
+{% endblock headthing %}
+
+
+{% block css %} 
+  <link rel="stylesheet" href="loanForm.css">
+  html {
+    height: 100%;
+  }
+  body {
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+    height: 150vh;
+    background: linear-gradient(#141e30, #243b55);
+  }
+  
+  .loan-box {
+    height: 120vh;
+    position: relative;
+    top: 65vh;
+    left: 50%;
+    width: 50%;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,.5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6);
+    border-radius: 10px;
+    margin-bottom: 100px;
+  }
+
+  @media (max-width: 576px) {
+    .loan-box {
+      wiidth: 300px;
+    }
+  }
+  
+  .loan-box h2 {
+    margin: 0 0 30px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .loan-box .user-box {
+    position: relative;
+  }
+  
+  .loan-box .user-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+  }
+  .loan-box .user-box label {
+    position: absolute;
+    top:0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+  }
+  
+  .loan-box .user-box input:focus ~ label,
+  .loan-box .user-box input:valid ~ label {
+    top: -20px;
+    left: 0;
+    color: #03e9f4;
+    font-size: 12px;
+  }
+  
+  .loan-box form a {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    color: #03e9f4;
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    margin-top: 40px;
+    letter-spacing: 4px
+  }
+  
+  .loan-box a:hover {
+    background: #03e9f4;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 100px #03e9f4;
+  }
+  
+  .loan-box a span {
+    position: absolute;
+    display: block;
+  }
+  
+  .loan-box a span:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #03e9f4);
+    animation: btn-anim1 1s linear infinite;
+  }
+  
+  @keyframes btn-anim1 {
+    0% {
+      left: -100%;
+    }
+    50%,100% {
+      left: 100%;
+    }
+  }
+  
+  .loan-box a span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #03e9f4);
+    animation: btn-anim2 1s linear infinite;
+    animation-delay: .25s
+  }
+  
+  @keyframes btn-anim2 {
+    0% {
+      top: -100%;
+    }
+    50%,100% {
+      top: 100%;
+    }
+  }
+  
+  .loan-box a span:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #03e9f4);
+    animation: btn-anim3 1s linear infinite;
+    animation-delay: .5s
+  }
+  
+  @keyframes btn-anim3 {
+    0% {
+      right: -100%;
+    }
+    50%,100% {
+      right: 100%;
+    }
+  }
+  
+  .loan-box a span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #03e9f4);
+    animation: btn-anim4 1s linear infinite;
+    animation-delay: .75s
+  }
+  
+  @keyframes btn-anim4 {
+    0% {
+      bottom: -100%;
+    }
+    50%,100% {
+      bottom: 100%;
+    }
+  }
+
+  /* Style for the select element */
+.loan-box .user-box .loan-dropdown {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+  /* Apply the same focus and label styles as input fields */
+}
+
+.loan-box .user-box .loan-dropdown:focus ~ label,
+.loan-box .user-box .loan-dropdown:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #03e9f4;
+  font-size: 12px;
+}
+
+/* Style for the select element */
+.loan-box .user-box .loan-dropdown {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+/* Change the background color and text color when the dropdown is in focus */
+/* .loan-box .user-box .loan-dropdown:focus {
+  background-color: rgba(5,51,106,255);
+  color: white;
+} */
+
+.loanType {
+  background-color: black; 
+}
+
+/* Style for the annualSpan element */
+.loan-box .user-box span#annual-amount {
+  font-size: 16px;
+  color: #fff;
+  margin-top: 10px; /* Adjust the margin as needed */
+  display: block; /* Ensure it's a block-level element */
+  margin-bottom: 5px;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+/* Add any additional styles you want for the annualSpan here */
+
+  
+{% endblock css %} 
+
+{% block body %}
+    <div class="loan-box">
+      <h2>Apply for Loan</h2>
+      <form>
+        <div class="user-box">
+          <input type="text" name="" required>
+          <label>Username</label>
+        </div>
+        <div class="user-box">
+          <input type="email" name="" required="">
+          <label>Email</label>
+        </div>
+        <div class="user-box">
+          <input type="tel" name="mobile-number" id="mobile-number" required>
+          <label>Mobile Number</label>
+        </div>
+        
+        <div class="user-box">
+          <select name="loan-type" class="loan-dropdown">
+            <option value="personal" class="loanType">Personal Loan</option>
+            <option value="home" class="loanType">Home Loan</option>
+            <option value="car" class="loanType">Car Loan</option>
+            <!-- Add more options as needed -->
+          </select>
+          <label>Loan Type</label>
+        </div>
+        <div class="user-box">
+          <input type="number" name="" id="monthly-amount" required="">
+          <label>Monthly Income</label>
+        </div>
+        <div class="user-box">
+          <span id="annual-amount">Annual Income: ₹0</span>
+        </div>
+        
+
+<!-- Loan Term -->
+<div class="user-box">
+  <input type="number" name="loan-term" required>
+  <label>Loan Term (months or years)</label>
+</div>
+
+<!-- Interest Rate (if applicable) -->
+<div class="user-box">
+  <input type="number" name="interest-rate">
+  <label>Interest Rate (%)</label>
+</div>
+
+        
+        <a href="#">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Submit
+        </a>
+      </form>
+    </div>
+    
+    <script src="loanForm.js"></script>
+
+    <script>
+      // Get the input field and the span element
+      const monthlyInput = document.getElementById("monthly-amount");
+      const annualSpan = document.getElementById("annual-amount");
+    
+      // Add an input event listener to the input field
+      monthlyInput.addEventListener("input", function () {
+        // Get the value from the input field and convert it to a number
+        const monthlyAmount = parseFloat(monthlyInput.value);
+    
+        // Check if the input is a valid number
+        if (!isNaN(monthlyAmount)) {
+          // Calculate the annual amount (monthly * 12) and update the span element
+          const annualAmount = monthlyAmount * 12;
+          annualSpan.textContent = `Annual Amount: ₹${annualAmount.toFixed(2)}`;
+        } else {
+          // If the input is not a valid number, display an error message or handle it as needed
+          annualSpan.textContent = "Invalid Input";
+        }
+      });
+    </script>
+    
+
+{% endblock body %} 
