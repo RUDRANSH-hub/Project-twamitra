@@ -56,7 +56,7 @@ ROOT_URLCONF = 'twamitra.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,8 +119,8 @@ USE_TZ = True
 
 # STATIC_ROOT = BASE_DIR/ 'static'
 STATIC_URL = 'static/'
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR,'static/css')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/css')
 ]
 
 # Default primary key field type
