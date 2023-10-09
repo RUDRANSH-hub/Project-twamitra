@@ -12,11 +12,10 @@
   <meta name="keywords" content="url shortener,url shortener online,url shortener free,url shortener free online,url shortener app,url shortener design,create url shortener,url shortener for instagram,url shortener for facebook,
      url shortener free google,url shortener github, g url shortener, urltheme, utlthe me , url, link shortener, shortner, link shortening, url theme, free shortening,">
 
-  <meta name="author" content="Shivansh Vasu">
-<link rel="icon" href="../static/icon.jpg" type="image/gif" >
+  <meta name="author" content="Twamitra">
   {% block headthing %}   {% endblock headthing %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <title> Twa-Mitra | {% block title %} {% endblock title %} </title>
+  <title> TwaMitra | {% block title %} {% endblock title %} </title>
  
   <style>
    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -25,14 +24,12 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
-
-  
 } 
 nav{
   display: flex;
   height: 90px;
   width: 100%;
-  background: #000000;
+  background: black;
   align-items: center;
   justify-content: space-between;
   padding: 0 50px 0 100px;
@@ -40,8 +37,9 @@ nav{
   border-bottom: 1px solid #e5e5e5;
 
 }
+
 nav .logo{
-  color: #fff;
+  color: white;
   font-size: 40px;
   font-weight: 500;
 }
@@ -125,14 +123,6 @@ input[type="checkbox"]{
     color: #03e9f4;
   }
 }
-
-
-
-
-
-
-
-
 
 ::selection{
   color: #03e9f4;
@@ -282,6 +272,36 @@ text-align: center;
  padding-bottom:18px;
 }
 
+/* Dropdown Styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 
 
 @media screen and (min-width: 40.375em) {
@@ -298,6 +318,11 @@ text-align: center;
   .footer__nav {
     flex: 2 0px;
   }
+
+  .logoImage {
+    color: pink;
+  }
+  
 }
  </style>
 
@@ -312,22 +337,50 @@ text-align: center;
 
   <nav>
     <div class="logo">
-      <a href="/" style="text-decoration: none; color: #03e9f4;">
-
-        Twa-Mitra</a>
+        <a href="/" style="text-decoration: none; color: white;">Twamitra</a>
     </div>
+
     <input type="checkbox" id="click">
     <label for="click" class="menu-btn">
       <i class="fas fa-bars"></i>
     </label>
     <ul>
-      <!-- <li><a class=" {% block titleactive1 %}  {% endblock titleactive1 %}  " href="">Home</a></li> -->
-      <li><a class=" {% block titleactive2 %}  {% endblock titleactive2 %}  " href="/whyurltheme">Why Twa-Mitra</a></li>
-      <li><a class=" {% block titleactive4 %}  {% endblock titleactive4 %}  " href="/connect">Connect</a></li>
+      <li><a class=" {% block titleactive2 %}  {% endblock titleactive2 %}  " href="/aboutus">About us</a></li>
 
-      {% if request.user.is_authenticated %}
+      <li class="dropdown">
+        <a class="{% block titleactive5 %} {% endblock titleactive5 %}" href="loanForm/loanForm.html">Loan Mitra<i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-content">
+          <a href="/homeloan">Home Loan</a>
+          <a href="/carloan">Car Loan</a>
+          <a href="/businessloan">Business Loan</a>
+          <a href="/loanagainstpolicy">Loan Against Policy</a>
+          <a href="/educationloan">Education Loan</a>
+          <!-- Add more dashboard links as needed -->
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="{% block titleactive12 %} {% endblock titleactive12 %}" href="#">Consultant Mitra <i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-content">
+          <a href="/architectservices">Architect/Valuation Services</a>
+          <a href="/legalservices">Legal Services</a>
+          <a href="/caservices">CA Services</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="{% block titleactive11 %} {% endblock titleactive11 %}" href="#">Startup Mitra <i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-content">
+          <a href="/companyprofileadvisory">Company Profile Advisory</a>
+          <a href="/companyregistration">Company Registration</a>
+          <a href="/gstregistration">GST Registration</a>
+          <a href="/msmeregistration">MSME Registration</a>
+          <a href="/logodesignandtrademark">Logo Design and Trademark</a>
+          <a href="/websitedevelopment">Website/MobileApp Development</a>
+          <a href="/generalaccountancyservices">General Accountancy Services</a>
+        </div>
+      </li>
+     {% if request.user.is_authenticated %}
 
-      <li><a class=" {% block titleactive8 %}  {% endblock titleactive8 %}  " href="/auth/dashboard">Dashboard</a></li>
+      <li><a class=" {% block titleactive13 %}  {% endblock titleactive13 %}  " href="/auth/dashboard">Dashboard</a></li>
       <li><a class=" {% block titleactive9%}  {% endblock titleactive9 %}  " href="/auth/logoutuser">Logout</a></li>
       <li><a class=" {% block titleactive10 %}  {% endblock titleactive10%}  " href="/supportus"> Take Subscription </a></li>
 
@@ -335,7 +388,7 @@ text-align: center;
       {% else %}
       <li><a class=" {% block titleactive6 %}  {% endblock titleactive6 %}  " href="/auth/loginuser">Log-in</a></li>
       <li><a class=" {% block titleactive7 %}  {% endblock titleactive7 %}  " href="/auth/registeruser">Register</a></li>
-      {% endif %}
+      {% endif %} 
       </ul>
   </nav>
 
@@ -350,92 +403,95 @@ text-align: center;
 
 
 
-  <div class="footer2">
+<div class="footer2">
 
 
 
-    <footer class="footer">
-      <div class="footer__addr">
-        <a href="/home" style="text-decoration: none; color: white;"><h1 class="footer__logo">
-        <h2 style="color: #03e9f4;"> Twa-Mitra  </h2>
+  <footer class="footer">
+    <div class="footer__addr">
+      <a href="/home" style="text-decoration: none; color: white;"><h1 class="footer__logo"> <i class="fas fa-link"></i> TWAMITRA</h1></a>
 
-       
-        Twa-Mitra
-        
-       
-      </div>
+      <h2 style="color: #03e9f4;"> Unlock your financial potential with Twamitra. </h2>
 
-      <ul class="footer__nav">
+     
+      Financial freedom begins with informed choices.  <br> Choose Twamitra.
+      
+     
+    </div>
 
-        <li class="nav__item">
-          <h2 class="nav__title" style="color: #03e9f4;">Services</h2>
+    <ul class="footer__nav">
 
-          <ul class="nav__ul">
-            <li>
-              <a href="/services">Solutions</a>
-            </li>
+      <li class="nav__item">
+        <h2 class="nav__title" style="color: #03e9f4;">Services</h2>
 
-            <li>
-              <a href="/services"> Help </a>
-            </li>
+        <ul class="nav__ul">
+          <li>
+            <a href="/services">Solutions</a>
+          </li>
 
-            <li>
-              <a href="/services"> FAQs </a>
-            </li>
-          </ul>
-        </li>
+          <li>
+            <a href="/services"> Help </a>
+          </li>
 
-        <li class="nav__item">
-          <h2 class="nav__title" style="color: #03e9f4;">Feedback</h2>
+          <li>
+            <a href="/services"> FAQs </a>
+          </li>
+        </ul>
+      </li>
 
-          <ul class="nav__ul">
-            <li>
-              <a href="/mailus">Email us</a>
-            </li>
+      <li class="nav__item">
+        <h2 class="nav__title" style="color: #03e9f4;">Feedback</h2>
 
-            <li>
-              <a href="/newsletter">Newsletter </a>
-            </li>
+        <ul class="nav__ul">
+          <li>
+            <a href="/mailus">Email us</a>
+          </li>
 
-            <li>
-              <a href="/connect">Fill this Form </a>
-            </li>
-          </ul>
-        </li>
-        
-        <li class="nav__item">
-          <h2 class="nav__title" style="color: #03e9f4; align-items: center;">Follow Us On</h2>
+          <li>
+            <a href="/newsletter">Newsletter </a>
+          </li>
 
-          <ul class="nav__ul">
-            <li>
-              <a href="https://www.instagram.com/urltheme" target="_blank" >
-                <span class="fab fa-instagram" style="text-decoration: none; color: #C13584"> </span> &nbsp; Instagram </a>
-            </li>
+          <li>
+            <a href="/connect">Fill this Form </a>
+          </li>
+        </ul>
+      </li>
+      
+      <li class="nav__item">
+        <h2 class="nav__title" style="color: #03e9f4; align-items: center;">Follow Us On</h2>
 
-            <li>
-              <a href="https://www.facebook.com/urltheme" target="_blank" >
-                <span class="fab fa-facebook" style="text-decoration: none; color: #3b5998"> </span> &nbsp; Facebook </a>
-            </li>
+        <ul class="nav__ul">
+          <li>
+            <a href="#" target="_blank" >
+              <span class="fab fa-instagram" style="text-decoration: none; color: #C13584"> </span> &nbsp; Instagram </a>
+          </li>
 
-            <li>
-               <a href="https://www.twitter.com/urltheme" target="_blank" >
-            <span class="fab fa-twitter" style="text-decoration: none; color: #00Acee">  </span> &nbsp; Twitter</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-  </div>
+          <li>
+            <a href="#" target="_blank" >
+              <span class="fab fa-facebook" style="text-decoration: none; color: #3b5998"> </span> &nbsp; Facebook </a>
+          </li>
 
-  <div class="legal">
+          <li>
+             <a href="#" target="_blank" >
+          <span class="fab fa-twitter" style="text-decoration: none; color: #00Acee">  </span> &nbsp; Twitter</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+</div>
+
+<div class="legal">
+<h2 style="color: #03e9f4; font-size:16px; font-weight:400;"> A Product of Twamitra Pvt. Ltd. <br> 
+Website Created by : <a href="/creator" target="_blank" style="color:white; font-size:16px;" > TwaMitra </a></h2>
+<br>
+<a href="/termsconditions" style="text-decoration: underline ; color: white; font-size:19px" > Terms & Policies  </a>
   
-  <a href="/termsconditions" style="text-decoration: underline ; color: white; font-size:19px" > Terms & Policies  </a>
-    
-    <br> <br>
+  <br> <br>
 
-    <p>&copy;  2023 Twa-Mitra | All Rights Reserved 
-    </p>
-  </div>
-  </footer>
+  <p>&copy;  2023 TWAMITRA | All Rights Reserved 
+  </p>
+</div>
+</footer>
   </div>
 </body>
 

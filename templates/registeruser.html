@@ -216,7 +216,7 @@ form .btn input[type="submit"]{
                 <form action="/auth/registeruser" method="POST" class="signup">
                 {% csrf_token %}
                 <div class="field">
-                     <input type="text" placeholder="Username" name="username" minlength="8" required pattern="[a-zA-Z0-9]+" value="{{username}}" required>
+                     <input type="text" placeholder="Username" name="username" minlength="2" required pattern="[a-zA-Z0-9]+" value="{{username}}" required>
                   </div>
                                    
                   <div class="field">

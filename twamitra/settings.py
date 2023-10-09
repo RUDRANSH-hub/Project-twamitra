@@ -24,7 +24,19 @@ SECRET_KEY = 'django-insecure-*=dc1x-hrz_)j4r*d5!dkp3027_xdz@989zchb@ed!p--&6-xu
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
 ALLOWED_HOSTS = []
 
 
