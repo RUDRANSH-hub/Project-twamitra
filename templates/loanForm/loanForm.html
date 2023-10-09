@@ -1,4 +1,4 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 
 {% block title %} Loan {% endblock title %}
  
@@ -262,7 +262,8 @@
 {% block body %}
     <div class="loan-box">
       <h2>Apply for Loan</h2>
-      <form action="loanform/submit" method="POST">
+      <form action="/servicepage" method="POST">
+      {% csrf_token %}
         <div class="user-box">
           <input type="text" name="name" required />
           <label>Name</label>
@@ -312,13 +313,10 @@
           <input type="number" name="interest-rate" />
           <label>Interest Rate (%)</label>
         </div> -->
-        <a href="#">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          Submit
-         </a>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" >
+       </div>
         </form>
     </div>
     

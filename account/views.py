@@ -5,6 +5,9 @@ from django.contrib.auth import logout, authenticate , login
 from  account.models import account
 from django.contrib import messages
 
+
+
+
 # Create your views here.
 def registeruser(request):
     
@@ -21,7 +24,7 @@ def registeruser(request):
         messages.success(request, " Username already Taken! Try With another Username...")
         return render( request, "registeruser.html", {"username":username, "email":email})
       
-      return redirect ("/auth/dashboard")
+      return redirect ("/servicepage")
       
     return render( request, "registeruser.html")
 
@@ -34,7 +37,7 @@ def loginuser(request):
 
       if user is not None:
         login(request, user)
-        return redirect ("/auth/dashboard")
+        return redirect ("/servicepage")
                
       else:
         messages.success(request, "Incorrect Credentials! Please check your Details and Retry...")
@@ -50,3 +53,4 @@ def logoutuser(request):
 
 def dashboard(request):
    return render ( request, "dashboard.html")
+
