@@ -15,6 +15,7 @@ class loan_detail(models.Model):
         # Add more options as needed
     ])
     monthly_salary = models.DecimalField(max_digits=10, decimal_places=2)
+    year_salary=models.DecimalField(max_digits=10, decimal_places=2)
     loan_amount = models.DecimalField(max_digits=10, decimal_places=2)
     # Add more fields as needed
 
