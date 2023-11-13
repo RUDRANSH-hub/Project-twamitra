@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from twamitraApp.models import loan_detail# Create your views here.
 from decimal import Decimal
 def index(request):
-    return render(request, "home.html")
+    return render(request, "home_temp.html")
 
 from django.shortcuts import render
 from .models import loan_detail  # Import your LoanDetail model here

@@ -32,12 +32,17 @@ nav{
   background: black;
   align-items: center;
   justify-content: space-between;
-  padding: 0 50px 0 100px;
+  padding: 0 50px 0 10px;
   flex-wrap: wrap;
   border-bottom: 1px solid #e5e5e5;
 
 }
-
+nav .icon{
+  width: 70px;
+  height: 70px;
+  padding: 0px;
+  margin: 0px;
+}
 nav .logo{
   color: white;
   font-size: 40px;
@@ -134,22 +139,6 @@ input[type="checkbox"]{
 {% block css %}
 
 {% endblock css %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -336,8 +325,9 @@ text-align: center;
 
 
   <nav>
+    <img class="icon" src="../static/img/logo2.jpeg" alt="">
     <div class="logo">
-        <a href="/" style="text-decoration: none; color: white;">Twamitra</a>
+        <a href="/" style="text-decoration: none; color: white; ">Twamitra</a>
     </div>
 
     <input type="checkbox" id="click">
