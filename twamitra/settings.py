@@ -38,6 +38,10 @@ LOGGING = {
     },
 }
 ALLOWED_HOSTS = []
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
 
 
 # Application definition
@@ -111,6 +115,10 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+                'SCOPE': [
+            'profile',
+            'email',
+        ],
         'APP': {
             'client_id': '962944909295-k0uhi9r8ab4fpljdaq5pimn7grup5jdq.apps.googleusercontent.com',
             'secret': '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',
