@@ -29,6 +29,15 @@
 <body>
     <!-- included the navbar component -->
     {% include 'navbar.html'%}
+    
+    <!-- Using flash messages -->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
     {% block content %}
 
