@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from twamitraApp.models import loan_detail# Create your views here.
 from decimal import Decimal
-def index(request):
-    return render(request, "base.html")
-
 from django.shortcuts import render
 from .models import loan_detail  # Import your LoanDetail model here
+
+
+def index(request):
+    return render(request, "home.html")
+
 
 def servicepage(request):
     if request.method == 'POST':
