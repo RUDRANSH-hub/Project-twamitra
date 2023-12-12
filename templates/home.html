@@ -12,6 +12,81 @@
 
 
 <div class="landingPageWrapper">
+
+    <!-- <div class="firstViewWrapper">
+        <div class="firstViewDetails">
+            <div class="firstViewLogoImg">
+                <img class="logo_fv" src="/img/logo.png" alt="">
+            </div>
+            <div class="firstViewTitle">
+                <h1>Twamitra</h1>
+                <h3>Your financial companion</h3>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Carousel wrapper -->
+    <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel"
+        data-mdb-carousel-init>
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide-to="2"
+                aria-label="Slide 3"></button>
+        </div>
+
+        <!-- Inner -->
+        <div class="carousel-inner">
+            <!-- Single item -->
+            <div class="carousel-item active">
+                <img src="{% static 'img/car1.jpg' %}" class="d-block w-100"
+                    alt="Sunset Over the City"  height="460vh"/>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>First slide label</h5>
+                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                </div>
+            </div>
+
+            <!-- Single item -->
+            <div class="carousel-item">
+                <img src="{% static 'img/car2.jpg' %}" class="d-block w-100"
+                    alt="Canyon at Nigh" height="460vh" />
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Second slide label</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+
+            <!-- Single item -->
+            <div class="carousel-item">
+                <img src="{% static 'img/car3.jpg' %}" class="d-block w-100"
+                    alt="Cliff Above a Stormy Sea" height="460vh"/>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Third slide label</h5>
+                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Inner -->
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample"
+            data-mdb-slide="prev">
+            <i class="fas fa-angle-left"></i>
+            <!-- <span class="carousel-control-prev-icon" aria-hidden="true"></span> -->
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample"
+            data-mdb-slide="next">
+            <i class="fas fa-angle-right"></i>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <!-- Carousel wrapper -->
+
     <div class="companyDetailsBar">
         <ul>
             <li>
@@ -35,6 +110,7 @@
 
 
     <div class="productsWrapper">
+        <!-- <h1>Our Products</h1> -->
         <ul class="products">
             <li>
                 <a href="#">
@@ -78,42 +154,48 @@
 
     <div class="freeCreditScoreWrapper">
         <div class="creditScoreHead">
-            <h3>Get your lastest Credit Score, Free</h3>
-            <p>One powerful number that puts you in control</p>
+            <h1>Get your lastest Credit Score, Free</h1>
+            <h5>One powerful number that puts you in control</h5>
         </div>
-        <div class="creditScoreDetails">
-            <ul>
-                <li>
-                    <i class="fas fa-chart-line"></i>
-                    <div>
-                        <h5>Increase chances of application approval</h5>
-                        <p>A score of 750+ boosts your chances of getting a loan/Credit Card</p>
-                    </div>
-                </li>
-                <li>
-                    <i class="fas fa-chart-line"></i>
-                    <div>
-                        <h5>Better offers</h5>
-                        <p>The better your score, the more offers you'll be eligible for</p>
-                    </div>
-                </li>
-                <li>
-                    <i class="fas fa-chart-line"></i>
-                    <div>
-                        <h5>Take charge of your finances</h5>
-                        <p>Understanding your score helps you take the right next steps</p>
-                    </div>
-                </li>
-            </ul>
-
+        <div class="creditScoreContainer">
+            <div class="creditScoreDetails">
+                <ul>
+                    <li>
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h5>Increase chances of application approval</h5>
+                            <p>A score of 750+ boosts your chances of getting a loan/Credit Card</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h5>Better offers</h5>
+                            <p>The better your score, the more offers you'll be eligible for</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h5>Take charge of your finances</h5>
+                            <p>Understanding your score helps you take the right next steps</p>
+                        </div>
+                    </li>
+                </ul>
+                <a href="#">
+                    <button class="btn btn-primary freeCreditScoreBtn">Get Your Free Credit Score</button>
+                </a>
+            </div>
+            <div class="creditScoreImg">
+                <img src="{% static 'img/creditScoreImg.jpg' %}" alt="">
+            </div>
         </div>
-        <button class="btn btn-primary freeCreditScoreBtn">Get Your Free Credit Score</button>
     </div>
 
     <div class="trendingProductsWrapper">
         <div class="trendingHeader">
-            <h3>Trending Products</h3>
-            <p>Our picks for the hottest offers and coolest deals all in one place</p>
+            <h1>Trending Products</h1>
+            <h5>Our picks for the hottest offers and coolest deals all in one place</h5>
         </div>
         <div class="trendingProducts">
             <ul>
@@ -198,6 +280,34 @@
             </ul>
         </div>
     </div>
-</div>
 
+    <div class="whyTwamitraWrapper">
+        <div class="whyImg1"></div>
+        <div class="whyImg2"></div>
+        <div class="whyHeader">
+            <h1>Why Twamitra</h1>
+            <h5>There's more than one reason to sign up with confidence</h5>
+        </div>
+        <div class="whyDetails">
+            <ul class="whyRankings">
+                <li>ICL Best Banking App</li>
+                <li>Business Today Best Fintech in Leading</li>
+                <li>IBR Fintech Bank Collaboration</li>
+            </ul>
+            <ul class="whyFeatures">
+                <li>Make Information Choices</li>
+                <li>Get Smarter & Wisher</li>
+                <li>100% Contactless KYC</li>
+                <li>Go Paperless all the way</li>
+                <li>Check Free Credit Reports</li>
+                <li>Finance Solutions For a Lifetime</li>
+                <li>Everything Finance in One Place</li>
+                <li>No Contact KYC</li>
+            </ul>
+        </div>
+        <div class="whyBtn">
+            <button class="btn btn-primary">Get Started</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
