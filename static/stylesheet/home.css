@@ -276,7 +276,7 @@ header {
     color: var(--text-gray-color);
 }
 
-.navbar__buttons-register {
+/* .navbar__buttons-register { */
     /* width: 100%; */
     /* font-weight: 500; */
     /* color: var(--text-gray-color); */
@@ -287,13 +287,13 @@ header {
     /* transition: 0.3s ease; */
     /* background-color: #e77401; */
 
-}
+/* } */
 
-.navbar__buttons-register:hover {
+/* .navbar__buttons-register:hover { */
     /* background-color: var(--theme-red-color); */
     /* border: 2px solid var(--theme-dark-color); */
     /* color: var(--theme-dark-color); */
-}
+/* } */
 
 .navbar .menu {
     display: none;
@@ -303,9 +303,9 @@ header {
     /* color: var(--text-lightGray-color); */
 }
 
-.hamBurger span {
-    /* color: var(--text-lightGray-color); */
-}
+/* .hamBurger span {
+    color: var(--text-lightGray-color);
+} */
 
 @media screen and (max-width: 1024px) {
     .navbar .menu {
@@ -491,7 +491,7 @@ ul {
 .footer-widget ul li {
     display: inline-block;
     color: white;
-    float: left;
+    /* float: left; */
     width: 50%;
     margin-bottom: 12px;
 }
@@ -780,9 +780,9 @@ ul {
     background: linear-gradient(to top, var(--theme-lightYellow-color),white);
 }
 
-.card:hover h5 {
-    /* color: white; */
-}
+/* .card:hover h5 {
+    color: white;
+} */
 
 .trendingProducts li {
     border-radius: 10px;
@@ -875,7 +875,7 @@ ul {
     padding: 1rem 3rem;
 }
 .whyImg1{
-    background-image: url(/img/whyImg1.png);
+    background-image: url('{{ STATIC_URL }}/img/whyImg1.png');
     background-repeat: no-repeat;
     position: absolute;
     width: 100%;
@@ -885,7 +885,7 @@ ul {
     z-index: -1;
 }
 .whyImg2{
-    background-image: url(/img/whyImg2.png);
+    background-image: url('{{ STATIC_URL }}/img/whyImg2.png');
     background-repeat: no-repeat;
     position: absolute;
     width: 100%;
