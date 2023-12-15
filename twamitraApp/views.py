@@ -1,14 +1,70 @@
+import random
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from twamitraApp.models import loan_detail# Create your views here.
 from decimal import Decimal
 from django.shortcuts import render
-from .models import loan_detail  # Import your LoanDetail model here
-
+from .models import *
+import uuid
 
 def index(request):
     return render(request, "home.html")
 
+def corporateRegistration(request):
+    context = {"professions": Professions.objects.all()}
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        businessName = request.POST.get('businessName')
+        profession_name = request.POST.get('profession')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        try:
+            referralCode = request.POST.get('referralCode')
+        except:
+            referralCode = None
+       
+        profession = Professions.objects.get(name=profession_name)
+        profession_mapping = {
+                'CA': 'C',
+                'ARCHITECT/VALUER': 'E',
+                'ADVOCATE/LEGAL ADVISOR': 'L',
+                'DSA': 'D',
+                'OTHERS': 'O',
+            }
+        
+        profession_code = profession_mapping.get(profession.name, 'O')
+        random_number = str(random.randint(1, 9999)).zfill(4)
+        generated_id = f'C{random_number}{profession_code}{name[0]}'
+        while CorporateDB.objects.filter(cid=generated_id).exists():
+            random_number = str(random.randint(1, 9999)).zfill(4)
+            generated_id = f'C{random_number}{profession_code}{name[0]}'
+        corporate = CorporateDB.objects.create(
+            cid=generated_id,
+            name=name,
+            businessName=businessName,
+            profession=profession,
+            email=email,
+            phone=phone,
+            referralCode=referralCode
+        )
+        return redirect('home')
+    else:
+        return render(request, "corporateRegistration.html",context)
+
+
+def GenerateCode(request):
+    if request.method == 'POST' and request.user.is_superuser:
+        code = request.POST.get('code')
+        percentage = request.POST.get('percentage')
+        GeneratedCode.objects.create(code=code, percentage=percentage)
+        print("Created Successfully",code)
+        return redirect('codegeneration')
+    
+    if request.user.is_superuser:
+        unique_code = str(uuid.uuid4())[:8]
+        return render(request, "generatecode.html", {'unique_code': unique_code})
+    else:
+        return render(request, "Error.html")
+    
 
 def servicepage(request):
     if request.method == 'POST':

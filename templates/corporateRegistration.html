@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+  {% block head_css_site %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'stylesheet/corporateRegistraion.css' %}">
+  {% endblock head_css_site %}
+{% endblock css %}
+
+
+{% block content %}
+
+
+<section class="corporateRegWrapper">
+    <div class="corporateRegHead">
+        <h1>Corporate Registration</h1>
+    </div>
+    <div class="corporateRegForm">
+        <div class="corporateRegImg">
+            <img src="{% static 'img/creditScoreImg.png' %}" alt="">
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-outline" data-mdb-input-init>
+                <input type="text" name="name" id="form12" class="form-control" />
+                <label class="form-label " for="form12">Name</label>
+            </div>
+            <div class="form-outline" data-mdb-input-init>
+                <input type="text" name="businessName" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Business Name</label>
+            </div>
+            <select class="form-select" name="profession" aria-label="Default select example">
+                <option selected disabled value="">Profession</option>
+                {% for profession in professions %}
+                <option value="{{profession.name}}">{{profession}}</option>
+               {% endfor %}
+            </select>
+            <div class="form-outline" data-mdb-input-init>
+                <input type="email" name="email" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Mail ID</label>
+            </div>
+            <div class="form-outline" data-mdb-input-init>
+                <input type="number" name="phone" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Mobile no.</label>
+            </div>
+            <div class="form-outline" data-mdb-input-init>
+                <input type="text" name="referralCode" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Referral code</label>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Submit</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+
+
+{% endblock %}

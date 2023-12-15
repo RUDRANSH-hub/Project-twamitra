@@ -1,8 +1,25 @@
 from django.db import models
 
 # Create your models here.
-class loan_detail(models.Model):
+class Professions(models.Model):
+    name = models.CharField(max_length=255)
     
+    def __str__(self) -> str:
+        return self.name
+
+class CorporateDB(models.Model):
+    cid = models.CharField(max_length=7, primary_key=True, unique=True)
+    name = models.CharField(max_length=255)
+    businessName = models.CharField(max_length=255)
+    profession = models.ForeignKey(Professions,on_delete=models.CASCADE)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    referralCode = models.CharField(max_length=8,null=True)
+    
+    def __str__(self) -> str:
+        return self.name
+    
+class loan_detail(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     address = models.CharField(max_length=255)
@@ -21,3 +38,18 @@ class loan_detail(models.Model):
 
     def __str__(self):
         return self.name
+    
+class GeneratedCode(models.Model):
+    code = models.CharField(max_length=8, unique=True, null=False)
+    PERCENTAGE_CHOICES = [
+        ('25%', '25'),
+        ('50%', '50'),
+        ('75%', '75'),
+        ('100%', '100'),
+    ]
+    percentage = models.CharField(max_length=20, choices=PERCENTAGE_CHOICES,null=False,default='25%')
+    is_redeemed = models.BooleanField(default=False)
+        
+    def __str__(self):
+        return self.code
+    

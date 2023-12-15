@@ -16,11 +16,12 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
     <!-- MDB -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merienda">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
   {% block css %}
   {% block head_css_site %}
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'stylesheet/home.css' %}">
+  <link rel="stylesheet" href="{% static 'stylesheet/home.css' %}" type='text/css'>
   {% endblock head_css_site %}
   {% endblock css %}
 
@@ -49,5 +50,14 @@
 
     <!-- MDB -->
     <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+        <!-- aos lib -->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                offset: 120,
+                duration: 1000,
+            });
+        </script>
+    
 </body>
 </html>
