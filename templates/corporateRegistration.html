@@ -6,20 +6,46 @@
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'stylesheet/corporateRegistraion.css' %}">
   {% endblock head_css_site %}
-{% endblock css %}
+  <style>
+  </style>
+
+  {% endblock css %}
 
 
 {% block content %}
 
 
 <section class="corporateRegWrapper">
-    <div class="corporateRegHead">
-        <h1>Corporate Registration</h1>
-    </div>
     <div class="corporateRegForm">
         <div class="corporateRegImg">
-            <img src="{% static 'img/creditScoreImg.png' %}" alt="">
+
+            <div class="corporateFormDetails">
+                <div class="anim">
+                    <div class="cube"></div>
+                    <div class="cube"></div>
+                    <div class="cube"></div>
+                    <div class="cube"></div>
+                    <div class="cube"></div>
+                    <div class="cube"></div>
+                </div>
+                <div class="cpinfo">
+
+                    <h1 data-aos="fade-up" data-aos-delay="50" >Corporate Registration</h1>
+                    <p data-aos="fade-up" data-aos-delay="100">Ascend the Corporate Heights: Elevate Your Success, Lead with Vision, and Achieve Pinnacle
+                        Excellence</p>
+                        <!-- <br> -->
+                        <hr>
+                    <ul>
+                        <li data-aos="fade-up" data-aos-delay="200" >Exclusive benefits upon registration</li>
+                        <li data-aos="fade-up" data-aos-delay="500" >Expand business connections with industry leaders</li>
+                        <li data-aos="fade-up" data-aos-delay="1000" >Access tailored financial solutions</li>
+                        <li data-aos="fade-up" data-aos-delay="1500" >Stay informed with industry insights</li>
+                        <li data-aos="fade-up" data-aos-delay="2000" >Participate in events for enhanced visibility</li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
         <form action="" method="POST">
             {% csrf_token %}
             <div class="form-outline" data-mdb-input-init>
@@ -55,6 +81,5 @@
 
     </div>
 </section>
-
 
 {% endblock %}

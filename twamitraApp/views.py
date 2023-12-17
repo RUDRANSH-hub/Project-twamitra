@@ -5,6 +5,13 @@ from decimal import Decimal
 from django.shortcuts import render
 from .models import *
 import uuid
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+
+razorpay_client = razorpay.Client(
+        auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 def index(request):
     return render(request, "home.html")
@@ -17,11 +24,23 @@ def corporateRegistration(request):
         profession_name = request.POST.get('profession')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
+        if(not name or not email or not phone or not businessName or not profession_name):
+            return HttpResponseBadRequest()
         try:
             referralCode = request.POST.get('referralCode')
         except:
             referralCode = None
-       
+            
+        disc = 0
+        if referralCode is not None:
+            try:
+                code_obj = GeneratedCode.objects.get(code=referralCode)
+                if not code_obj.is_redeemed:
+                    disc = int(code_obj.percentage.strip('%'))
+                else:
+                    disc = 0
+            except GeneratedCode.DoesNotExist:
+                disc = 0
         profession = Professions.objects.get(name=profession_name)
         profession_mapping = {
                 'CA': 'C',
@@ -30,13 +49,26 @@ def corporateRegistration(request):
                 'DSA': 'D',
                 'OTHERS': 'O',
             }
-        
         profession_code = profession_mapping.get(profession.name, 'O')
         random_number = str(random.randint(1, 9999)).zfill(4)
         generated_id = f'C{random_number}{profession_code}{name[0]}'
         while CorporateDB.objects.filter(cid=generated_id).exists():
             random_number = str(random.randint(1, 9999)).zfill(4)
             generated_id = f'C{random_number}{profession_code}{name[0]}'
+        
+        amount = (25000-((25000*disc)/100))*100
+        currency = 'INR'
+        data = { "amount": amount, "currency": "INR"}
+        razorpay_order = razorpay_client.order.create(data=data)
+
+        razorpay_order_id = razorpay_order['id']
+        callback_url = 'http://127.0.0.1:8000/payment-handler/'
+        context = {"professions": Professions.objects.all()}
+        context['razorpay_order_id'] = razorpay_order_id
+        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        context['razorpay_amount'] = amount
+        context['currency'] = "INR"
+        context['callback_url'] = callback_url
         corporate = CorporateDB.objects.create(
             cid=generated_id,
             name=name,
@@ -44,11 +76,51 @@ def corporateRegistration(request):
             profession=profession,
             email=email,
             phone=phone,
-            referralCode=referralCode
+            referralCode=referralCode,
+            razorpay_order_id = razorpay_order_id
         )
-        return redirect('home')
+        return render(request, "confirmPayment.html",context)
     else:
         return render(request, "corporateRegistration.html",context)
+
+@csrf_exempt
+def paymenthandler(request):
+    if request.method == "POST":
+            razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            razorpay_signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+            corporate = CorporateDB.objects.get(razorpay_order_id = razorpay_order_id)
+            server_order_id = corporate.razorpay_order_id
+            result = razorpay_client.utility.verify_payment_signature({
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+            })
+            if result is True:
+                corporate.has_paid = True
+                corporate.save()
+                CorporatePayments.objects.create(
+                cid=corporate,
+                razorpay_order_id = razorpay_order_id,
+                razorpay_payment_id = razorpay_payment_id,
+                razorpay_signature = razorpay_signature
+                )
+                if corporate.referralCode is not None and not corporate.referralCode == '':
+                    try:
+                        code_obj = GeneratedCode.objects.get(code = corporate.referralCode)
+                        code_obj.is_redeemed = True
+                        code_obj.save()
+                    except Exception as e:
+                        print("Error",e)
+            return redirect('home')          
+    else:
+        return HttpResponseBadRequest()
+
 
 
 def GenerateCode(request):
@@ -120,3 +192,22 @@ def servicepage(request):
     return render(request, "loanForm/loanForm.html")
   ## currently adding loan only 
 
+def personalLoan(request):
+    return render(request, "loanForms/personalLoanForm.html")
+
+def educationLoan(request):
+    return render(request, "loanForms/educationLoanForm.html")
+def homeLoan(request):
+    return render(request, "loanForms/homeLoanForm.html")
+
+def twoWheelerLoan(request):
+    return render(request, "loanForms/twoWheelerLoanForm.html")
+
+def carLoan(request):
+    return render(request, "loanForms/carLoanForm.html")
+
+def usedCarLoan(request):
+    return render(request, "loanForms/usedCarLoanForm.html")
+
+def consultantServices(request):
+    return render(request, "consultantServices.html")

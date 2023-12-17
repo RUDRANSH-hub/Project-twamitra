@@ -9,3 +9,5 @@ class load_details(admin.ModelAdmin):
 admin.site.register(GeneratedCode)
 admin.site.register(Professions)
 admin.site.register(CorporateDB)
+admin.site.register(CorporatePayments)
+

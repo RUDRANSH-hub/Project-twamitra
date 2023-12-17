@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+  {% block head_css_site %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'stylesheet/services.css' %}">
+
+  {% endblock head_css_site %}
+{% endblock css %}
+
+
+{% block content %}
+
+
+<div class="servicesWrapper" >
+    <h1>Our Services</h1>
+    <div class="servicesList" data-aos="fade-up">
+        <a href="#" class="serviceItem"  data-aos="fade-up" data-aos-delay="100">
+            <h3>DSA (Direct Selling Agent)</h3>
+            <p>Empower your business with our DSA services. Unlock opportunities for effective marketing and sales.</p>
+        </a>
+        <a href="#" class="serviceItem"  data-aos="fade-up" data-aos-delay="200">
+            <h3>CA (Chartered Accountant)</h3>
+            <p>Financial expertise at your fingertips. Consult with our experienced Chartered Accountants for strategic financial planning.</p>
+        </a>
+        <a href="#" class="serviceItem"  data-aos="fade-up" data-aos-delay="300">
+            <h3>Architect</h3>
+            <p>Create stunning spaces with our architectural services. Design and plan your projects with experienced architects.</p>
+        </a>
+        <a href="#" class="serviceItem"  data-aos="fade-up" data-aos-delay="400">
+            <h3>Valuer</h3>
+            <p>Accurate and reliable valuation services. Trust our team of expert valuators for precise and fair assessments.</p>
+        </a>
+        <a href="#" class="serviceItem"  data-aos="fade-up"  data-aos-delay="500">
+            <h3>Any Other</h3>
+            <p>Customized solutions tailored to your unique needs. Explore our diverse range of services beyond DSA, CA, Architect, and Valuer.</p>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

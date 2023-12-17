@@ -348,10 +348,13 @@ ul {
 
 
 .corporateRegBtn{
+    background-color: var(--theme-red-color);
     color: white;
+    transition: 0.3s ease-in-out;
 }
-
-
+.corporateRegBtn:hover{
+    color: var(--theme-yellow-color);
+}
 .footer-section {
     /* background: #151414; */
     background-color: var(--theme-red-color);
