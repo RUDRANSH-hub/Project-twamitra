@@ -32,16 +32,13 @@ def corporateRegistration(request):
             referralCode = None
             
         disc = 0
-        if referralCode:
+        if referralCode is not None:
             try:
                 code_obj = GeneratedCode.objects.get(code=referralCode)
                 if not code_obj.is_redeemed:
                     disc = int(code_obj.percentage.strip('%'))
                 else:
                     disc = 0
-                print(code_obj.percentage.strip('%'))
-                print("*******************")
-                print(disc)
             except GeneratedCode.DoesNotExist:
                 disc = 0
         profession = Professions.objects.get(name=profession_name)
@@ -66,7 +63,6 @@ def corporateRegistration(request):
 
         razorpay_order_id = razorpay_order['id']
         callback_url = 'http://127.0.0.1:8000/payment-handler/'
- 
         context = {"professions": Professions.objects.all()}
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
@@ -90,7 +86,6 @@ def corporateRegistration(request):
 @csrf_exempt
 def paymenthandler(request):
     if request.method == "POST":
-        try:
             razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
             razorpay_order_id = request.POST.get('razorpay_order_id', '')
             razorpay_signature = request.POST.get('razorpay_signature', '')
@@ -106,9 +101,7 @@ def paymenthandler(request):
             'razorpay_payment_id': razorpay_payment_id,
             'razorpay_signature': razorpay_signature
             })
-            print("################################-")
-            print(result)
-            if result:
+            if result is True:
                 corporate.has_paid = True
                 corporate.save()
                 CorporatePayments.objects.create(
@@ -117,13 +110,14 @@ def paymenthandler(request):
                 razorpay_payment_id = razorpay_payment_id,
                 razorpay_signature = razorpay_signature
                 )
-                if corporate.referralCode is not None:
-                    code_obj = GeneratedCode.objects.get(code = corporate.referralCode)
-                    code_obj.is_redeemed = True
-                    code_obj.save()
-            return render(request,'home.html')           
-        except:
-            return HttpResponseBadRequest()
+                if corporate.referralCode is not None and not corporate.referralCode == '':
+                    try:
+                        code_obj = GeneratedCode.objects.get(code = corporate.referralCode)
+                        code_obj.is_redeemed = True
+                        code_obj.save()
+                    except Exception as e:
+                        print("Error",e)
+            return redirect('home')          
     else:
         return HttpResponseBadRequest()
 
@@ -198,3 +192,22 @@ def servicepage(request):
     return render(request, "loanForm/loanForm.html")
   ## currently adding loan only 
 
+def personalLoan(request):
+    return render(request, "loanForms/personalLoanForm.html")
+
+def educationLoan(request):
+    return render(request, "loanForms/educationLoanForm.html")
+def homeLoan(request):
+    return render(request, "loanForms/homeLoanForm.html")
+
+def twoWheelerLoan(request):
+    return render(request, "loanForms/twoWheelerLoanForm.html")
+
+def carLoan(request):
+    return render(request, "loanForms/carLoanForm.html")
+
+def usedCarLoan(request):
+    return render(request, "loanForms/usedCarLoanForm.html")
+
+def consultantServices(request):
+    return render(request, "consultantServices.html")

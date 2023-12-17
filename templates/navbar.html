@@ -21,32 +21,32 @@
                         </svg>
                     </a>
                     <ul class="navbar__list-drop-menu">
-                        <li><a href="#">
+                        <li><a href="{% url 'personalLoan' %}">
                                 <i class="fas fa-user"></i>
                                 <span>Personal</span>
                             </a>
                         </li>
-                        <li><a href="#">
+                        <li><a href="{% url 'carLoan' %}">
                                 <i class="fas fa-car"></i>
                                 <span>Car</span>
                             </a>
                         </li>
-                        <li><a href="#">
+                        <li><a href="{% url 'homeLoan' %}">
                                 <i class="fas fa-house"></i>
                                 <span>Home</span>
                             </a>
                         </li>
-                        <li><a href="#">
+                        <li><a href="{% url 'educationLoan' %}">
                                 <i class="fas fa-book-open"></i>
                                 <span>Education</span>
                             </a>
                         </li>
-                        <li><a href="#">
+                        <li><a href="{% url 'usedCarLoan' %}">
                                 <i class="fas fa-car-side"></i>
                                 <span>Used Car</span>
                             </a>
                         </li>
-                        <li><a href="#">
+                        <li><a href="{% url 'twoWheelerLoan' %}">
                                 <i class="fas fa-motorcycle"></i>
                                 <span>Two wheeler</span>
                             </a>
@@ -54,15 +54,8 @@
                     </ul>
                 </li>
                 <li class="navbar__list-drop">
-                    <a href="#">Consultant Mitra
-                        <svg class="arrow" width="10" height="6" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke="#fff" stroke-width="1.5" fill="none" d="m1 1 4 4 4-4" />
-                        </svg>
+                    <a href="{% url 'consultantServices' %}">Consultant Mitra
                     </a>
-                    <ul class="navbar__list-drop-menu">
-                        <li><a href="#"><span>Credit Cards</span></a></li>
-                        <li><a href="#"><span>Debit Cards</span></a></li>
-                    </ul>
                 </li>
                 <li><a href="#">Startup Mitra</a>
                 </li>
@@ -73,7 +66,7 @@
                 <a href="{% url 'logout' %}"><button class="btn btn-outline-white" >Logout</button></a>
                 {% else %}
                 <a class="corporateRegLink" href="{% url 'corporate-registration' %}">
-                    <button class="btn btn btn-outline-light btn-rounded corporateRegBtn">Corporate Registration</button>
+                    <button class="corporateRegBtn">Corporate Registration</button>
                 </a>
 
                 <a class="navbar__buttons-login" href="{% url 'login' %}"><button class="btn btn-outline-white">Login</button></a>
