@@ -1,0 +1,30 @@
+.corporateRegWrapper{
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+.corporateRegImg img{
+    height: 20rem;
+}
+.corporateRegForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* display: flex;
+    flex-direction: column; */
+    column-gap: 8rem;
+}
+.corporateRegForm form{
+    width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.corporateRegForm label{
+    margin-top: 7px;
+}
+
