@@ -10,4 +10,6 @@ admin.site.register(GeneratedCode)
 admin.site.register(Professions)
 admin.site.register(CorporateDB)
 admin.site.register(CorporatePayments)
+admin.site.register(ServiceType)
+admin.site.register(SubscriptionType)
 

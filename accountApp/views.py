@@ -22,7 +22,7 @@ def registeruser(request):
         messages.success(request, "Password mismatch!")
         return render( request, "register.html", {"email":email})                
       try:
-        user = User.objects.create_user(username=email, email=email,password=password1)
+        user = User.objects.create_user(username=email, email=email,password=password1,is_customer=True)
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
       except:
         messages.success(request, " Username already Taken! Try With another Username...")

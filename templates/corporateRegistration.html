@@ -46,7 +46,16 @@
             </div>
         </div>
 
-        <form action="" method="POST">
+        <form action="" method="POST" onsubmit="return checkConfirmPasswordOnBlur();">
+            <div class="regLog">
+                <a href="{% url 'corporate-registration' %}">
+                    <button class="reg regLogbtn" type="button" style="color: var(--text-gray-color);"><h3>Register</h3></button>
+                </a>
+                <div class="vl"></div>
+                <a href="{% url 'corporateLogin' %}">
+                    <button class="log regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3>Login</h3></button>
+                </a>
+            </div>
             {% csrf_token %}
             <div class="form-outline" data-mdb-input-init>
                 <input type="text" name="name" id="form12" class="form-control" />
@@ -74,12 +83,77 @@
                 <input type="text" name="referralCode" id="form12" class="form-control" />
                 <label class="form-label" for="form12">Referral code</label>
             </div>
+            <select class="form-select" name="location" aria-label="Default select example">
+                <option selected disabled value="">Location</option>
+                <option value="delhi">Delhi</option>
+                <option value="noida">Noida</option>
+                <option value="varanasi">Varanasi</option>
+                <option value="jhansi">Jhansi</option>
+            </select>
+            <div class="form-outline" data-mdb-input-init>
+                <input type="password" name="password1" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Password</label>
+            </div>
+            <div class="form-outline" data-mdb-input-init>
+                <input type="password" name="password2" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Confirm Password</label>
+            </div>
             <div>
-                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Submit</button>
+                <center>
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Submit</button>
+                </center>
             </div>
         </form>
 
     </div>
 </section>
+
+<script>
+
+    function checkConfirmPasswordOnBlur() {
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+        var confirmPasswordMessage = document.getElementById('confirmPasswordMessage');
+        var submitButton = document.getElementById('submitButton');
+
+        if (password !== confirmPassword) {
+            confirmPasswordMessage.style.display = "block";
+            confirmPasswordMessage.innerText = 'Passwords do not match';
+            submitButton.disabled = true;
+        } else {
+            confirmPasswordMessage.style.display = "none";
+            submitButton.disabled = false;
+        }
+    }
+
+    async function fetchVerification() {
+        var verifyStatus = document.getElementById('verifyStatus');
+        url = "yePeUrlAyega";
+        // var result = false;
+        // var result = true;
+        try {
+            const result = await fetch(url);
+            if (result) {
+                verifyStatus.style.display = "block";
+                verifyStatus.innerText = 'Verified';
+                verifyStatus.style.color = "green"
+            }
+            else {
+                verifyStatus.style.display = "block";
+                verifyStatus.innerText = 'Wrong Code';
+                verifyStatus.style.color = "red"
+            }
+        }
+        catch {
+            console.log("Error while fetching API");
+        }
+
+    }
+
+
+</script>
+
+
+
 
 {% endblock %}

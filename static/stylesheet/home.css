@@ -16,7 +16,12 @@
 }
 
 
-
+.btn-primary{
+    background-color: var(--theme-red-color);
+}
+.btn-primary:hover{
+    background-color: var(--theme-red-color);
+}
 
 :root {
     --theme-light-color: #fafafa;
@@ -29,7 +34,7 @@
     --theme-lightYellow-color: rgb(255, 239, 208);
     --theme-red-color: #336699;
     --theme-darkBlue-color: #00011e;
-    --theme-lightRed-color: #b0dbff;
+    --theme-lightRed-color: #cce8ff;
 }
 
 body {
@@ -67,7 +72,7 @@ ul {
     padding: 0 1rem;
 }
 
-
+/* 
 header {
     position: relative;
     width: 100%;
@@ -75,7 +80,7 @@ header {
     right: 0;
     z-index: 1000;
     background-color: var(--theme-light-color);
-}
+} */
 
 .navbar {
     display: flex;
@@ -86,6 +91,7 @@ header {
     background-color: var(--theme-red-color);
     position: fixed;
     top: 0;
+    z-index: 5000;
     /* position: fixed; */
     /* background: linear-gradient(to bottom,var(--theme-darkBlue-color),#00011e93 ); */
     /* background-color: var(--theme-darkBlue-color); */
@@ -127,7 +133,7 @@ header {
     justify-content: space-between;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1240px) {
     .navbar__menu {
         position: absolute;
         top: 100%;
@@ -136,7 +142,7 @@ header {
         min-height: calc(100vh - 78px);
         /* min-height: 100%; */
         height: 100%;
-        background-color: var(--theme-darkBlue-color);
+        background-color: var(--theme-red-color);
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
@@ -158,13 +164,20 @@ header {
     gap: 2rem;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1240px) {
     .navbar__list {
         flex-direction: column;
         flex-grow: 0;
     }
 }
-
+.loanMitraNav{
+    color: var(--theme-light-color);
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+.loanMitraNav:hover {
+    color: var(--theme-yellow-color);
+}
 .navbar__list li a {
     display: flex;
     align-items: center;
@@ -262,7 +275,7 @@ header {
 }
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1240px) {
     .navbar__buttons {
         width: 100%;
         flex-direction: column;
@@ -309,7 +322,7 @@ header {
     /* color: var(--text-lightGray-color); */
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1240px) {
     .navbar .menu {
         display: block;
     }
@@ -355,6 +368,7 @@ ul {
 .corporateRegBtn:hover{
     color: var(--theme-yellow-color);
 }
+
 .footer-section {
     /* background: #151414; */
     background-color: var(--theme-red-color);
@@ -506,7 +520,7 @@ ul {
 }
 
 .footer-widget ul li a:hover {
-    color: var(--theme-red-color);
+    color: var(--theme-yellow-color);
 }
 
 .footer-widget ul li a {
