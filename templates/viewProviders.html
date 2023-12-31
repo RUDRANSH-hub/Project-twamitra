@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load hide_email %}
+{% load hide_phone %}
+
+{% block css %}
+  {% block head_css_site %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'stylesheet/corporateList.css' %}">
+
+  {% endblock head_css_site %}
+{% endblock css %}
+
+
+{% block content %}
+
+
+<div class="corporateListWrapper">
+    <header class="corporateListHead">
+        <h2>Corporate List</h2>
+    </header>
+    <ul class="corporateList">
+        {% for corporate in corporates %}
+        <li class="corporateItem">
+            <div class="corporateProfileImg">
+                <img src="https://www.shutterstock.com/image-photo/happy-mid-aged-business-man-600nw-2307212331.jpg"
+                    alt="">
+            </div>
+            <div class="corporateDetails">
+                <p class="corporateName">{{corporate.user.name}}</p>
+                <p class="corporateEmail"><b>Email ID</b> - {{corporate.user.email|hide_email}}</p>
+                <p class="corporateMob"><b>Mobile no</b> - {{corporate.user.phone|hide_phone}}</p>
+                <div class="ratingApply">
+                    <p class="corporateRating"><b>Ratings</b> - 4/5</p>
+                    <p class="corporateApply"><button class="corporateApplybtn">Apply</button> </p>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

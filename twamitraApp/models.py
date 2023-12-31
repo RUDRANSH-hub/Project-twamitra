@@ -1,36 +1,63 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from accountApp.models import User
 
 # Create your models here.
+class SubscriptionType(models.Model):
+    type = models.CharField(max_length=20)
+    value = models.PositiveIntegerField()
+    default_price = models.DecimalField(max_digits=10, decimal_places=2)
+    def __str__(self):
+        return self.type
+    
 class Professions(models.Model):
     name = models.CharField(max_length=255)
     
     def __str__(self) -> str:
         return self.name
 
+def user_profile_pic_path(instance, filename):
+    return f'Images/corporates/profile/user_{instance.cid}-{filename}'
+
+def user_signature_path(instance, filename):
+    return f'Images/corporates/signature/user_{instance.cid}-{filename}'
+
+
 class CorporateDB(models.Model):
-    cid = models.CharField(max_length=7, primary_key=True, unique=True)
-    name = models.CharField(max_length=255)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cid = models.CharField(max_length=7, unique=True)
     businessName = models.CharField(max_length=255)
     profession = models.ForeignKey(Professions,on_delete=models.CASCADE)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15)
-    referralCode = models.CharField(max_length=8,null=True)
-    razorpay_order_id = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    location = models.CharField(max_length=255)
+    companyName = models.CharField(max_length=255,null=True)
+    experience = models.CharField(max_length=255,null=True)
+    address = models.TextField(null=True)
+    pan = models.CharField(max_length=20,null=True)
+    alternatePhone = models.CharField(max_length=15,null=True)
+    profilePic = models.ImageField(upload_to=user_profile_pic_path,null=True)
+    signature = models.ImageField(upload_to=user_signature_path,null=True)
     has_paid = models.BooleanField(default=False)
-    
+    subscription_type = models.ForeignKey(SubscriptionType, on_delete=models.SET_NULL,null=True)
+    active_till = models.DateField(auto_now_add=False,null=True)
+    is_active = models.BooleanField(default=False)
+        
     def __str__(self) -> str:
-        return self.name
-    
+        return self.user.name
+
 class CorporatePayments(models.Model):
     cid = models.ForeignKey(CorporateDB,on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    subscription_type = models.ForeignKey(SubscriptionType, on_delete=models.SET_NULL,null=True)
+    referralUsed = models.BooleanField(default=False)
+    referralCode = models.CharField(max_length=8,null=True)
     razorpay_order_id = models.CharField(max_length=255)
-    razorpay_payment_id = models.CharField(max_length=255)
-    razorpay_signature = models.CharField(max_length=255)
+    razorpay_payment_id = models.CharField(max_length=255,null=True)
+    razorpay_signature = models.CharField(max_length=255,null=True)
+    verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self) -> str:
-        return self.cid.name
+        return f'{self.cid.user.name} - {self.subscription_type} - {self.amount}'
     
 class loan_detail(models.Model):
     name = models.CharField(max_length=255)
@@ -66,3 +93,10 @@ class GeneratedCode(models.Model):
     def __str__(self):
         return self.code
     
+class ServiceType(models.Model):
+    name = models.CharField(max_length=150)
+    profession = models.ForeignKey(Professions,on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __str__(self) -> str:
+        return f'{self.name} - {self.profession.name}'
