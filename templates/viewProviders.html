@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load hide_email %}
+{% load hide_phone %}
 
 {% block css %}
   {% block head_css_site %}
@@ -26,8 +28,8 @@
             </div>
             <div class="corporateDetails">
                 <p class="corporateName">{{corporate.user.name}}</p>
-                <p class="corporateEmail"><b>Email ID</b> - {{corporate.user.email}}</p>
-                <p class="corporateMob"><b>Mobile no</b> - {{corporate.user.phone}}</p>
+                <p class="corporateEmail"><b>Email ID</b> - {{corporate.user.email|hide_email}}</p>
+                <p class="corporateMob"><b>Mobile no</b> - {{corporate.user.phone|hide_phone}}</p>
                 <div class="ratingApply">
                     <p class="corporateRating"><b>Ratings</b> - 4/5</p>
                     <p class="corporateApply"><button class="corporateApplybtn">Apply</button> </p>
