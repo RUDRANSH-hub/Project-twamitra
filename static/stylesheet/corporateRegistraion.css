@@ -63,7 +63,14 @@ border-radius: 10px;
 .regLogbtn:hover{
 background-color: var(--theme-lightRed-color);
 }
-
+.regLogbtn h3{
+  height: 100%;
+}
+.regLogbtn  a{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 .vl {
 border-left: 2px solid var(--theme-red-color);
 height: 3rem;

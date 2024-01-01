@@ -48,13 +48,9 @@
 
         <form action="" method="POST" onsubmit="return checkConfirmPasswordOnBlur();">
             <div class="regLog">
-                <a href="{% url 'corporate-registration' %}">
-                    <button class="reg regLogbtn" type="button" style="color: var(--text-gray-color);"><h3>Register</h3></button>
-                </a>
+                <button class="reg regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3><a href="{% url 'corporate-registration' %}">Register</a></h3></button>
                 <div class="vl"></div>
-                <a href="{% url 'corporateLogin' %}">
-                    <button class="log regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3>Login</h3></button>
-                </a>
+                <button class="log regLogbtn" type="button" style="color: var(--text-gray-color);"><h3><a href="{% url 'corporateLogin' %}">Login</a></h3></button>
             </div>
             {% csrf_token %}
             <div class="form-outline" data-mdb-input-init>
@@ -78,10 +74,6 @@
             <div class="form-outline" data-mdb-input-init>
                 <input type="number" name="phone" id="form12" class="form-control" />
                 <label class="form-label" for="form12">Mobile no.</label>
-            </div>
-            <div class="form-outline" data-mdb-input-init>
-                <input type="text" name="referralCode" id="form12" class="form-control" />
-                <label class="form-label" for="form12">Referral code</label>
             </div>
             <select class="form-select" name="location" aria-label="Default select example">
                 <option selected disabled value="">Location</option>
@@ -125,32 +117,6 @@
             submitButton.disabled = false;
         }
     }
-
-    async function fetchVerification() {
-        var verifyStatus = document.getElementById('verifyStatus');
-        url = "yePeUrlAyega";
-        // var result = false;
-        // var result = true;
-        try {
-            const result = await fetch(url);
-            if (result) {
-                verifyStatus.style.display = "block";
-                verifyStatus.innerText = 'Verified';
-                verifyStatus.style.color = "green"
-            }
-            else {
-                verifyStatus.style.display = "block";
-                verifyStatus.innerText = 'Wrong Code';
-                verifyStatus.style.color = "red"
-            }
-        }
-        catch {
-            console.log("Error while fetching API");
-        }
-
-    }
-
-
 </script>
 
 

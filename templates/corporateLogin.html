@@ -48,13 +48,9 @@
 
         <form action="" method="POST">
             <div class="regLog">
-                <a href="{% url 'corporate-registration' %}">
-                    <button class="reg regLogbtn" type="button" style="color: var(--text-gray-color);"><h3>Register</h3></button>
-                </a>
+                <button class="reg regLogbtn" type="button" style="color: var(--text-gray-color);"><h3><a href="{% url 'corporate-registration' %}">Register</a></h3></button>
                 <div class="vl"></div>
-                <a href="{% url 'corporateLogin' %}">
-                    <button class="log regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3>Login</h3></button>
-                </a>
+                <button class="log regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3><a href="{% url 'corporateLogin' %}">Login</a></h3></button>
             </div>
             {% csrf_token %}
                 <div class="form-outline" data-mdb-input-init>

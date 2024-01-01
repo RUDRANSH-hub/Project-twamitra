@@ -65,6 +65,8 @@
     </header>
     <ul class="plansContainer">
         {% for subscription in subscriptions %}
+        <form method="post" action="{% url 'initiatePaymentRequest' %}">
+            {% csrf_token %}
         <li class="plan">
             <div class="months12">
                 <lord-icon src="https://cdn.lordicon.com/qxqvtswi.json" trigger="loop" state="hover-roll"
@@ -73,9 +75,13 @@
                 <p class="subDuration">{{subscription.value}} Months</p>
                 <p class="subOldPrice"><s>&#8377; {{subscription.default_price|stringformat:"i"}}</s></p>
                 <p class="subNewPrice">&#8377; {{subscription.new_price|stringformat:"i"}}</p>
-                <button class="btn btn-outline-warning">Subscribe</button>
+                <input type="hidden" name="value" value="{{subscription.value}}">
+                <input type="hidden" name="default_price" value="{{subscription.default_price}}">
+                <input type="hidden" name="referralCode" value="{{referralCode}}">
+                <button type="submit" class="btn btn-outline-warning">Subscribe</button>
             </div>
         </li>
+        </form>
         {% endfor %}
     </ul>
 </div>

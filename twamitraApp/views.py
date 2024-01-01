@@ -40,21 +40,6 @@ def corporateRegistration(request):
         if(password1 != password2):
             messages.success(request, "Password mismatch!")
             return render( request, "corporateRegistration.html")                
-        try:
-            referralCode = request.POST.get('referralCode')
-        except:
-            referralCode = None
-            
-        disc = 0
-        if referralCode is not None:
-            try:
-                code_obj = GeneratedCode.objects.get(code=referralCode)
-                if not code_obj.is_redeemed:
-                    disc = int(code_obj.percentage.strip('%'))
-                else:
-                    disc = 0
-            except GeneratedCode.DoesNotExist:
-                disc = 0
         profession = Professions.objects.get(name=profession_name)
         profession_mapping = {
                 'CA': 'C',
@@ -78,7 +63,6 @@ def corporateRegistration(request):
                     businessName=businessName,
                     profession=profession,
                     location=location,
-                    referralCode=referralCode,
                     is_active=False
                 )
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
@@ -139,7 +123,7 @@ def corporateProfileForm(request):
         corporate_db.save()
 
         messages.success(request, 'Profile updated successfully!')
-        return redirect('corporateDashboard')  # Replace 'your_redirect_url' with the appropriate URL
+        return redirect('corporateDashboard')
     else:
         data = {
         'companyName': corporate_db.companyName,
@@ -149,7 +133,6 @@ def corporateProfileForm(request):
         'alternatePhone': corporate_db.alternatePhone,
         'signature': corporate_db.signature,
         'profilePic': corporate_db.profilePic
-        # Add more fields as needed
         }
 
         print("gadbad")
@@ -199,7 +182,7 @@ def verifyReferralCode(request):
             referralCode = request.POST.get('referralCode')
         except:
             referralCode = None
-            
+        print(referralCode)    
         disc = 0
         if referralCode is not None:
             try:
@@ -210,6 +193,9 @@ def verifyReferralCode(request):
                     disc = 0
             except GeneratedCode.DoesNotExist:
                 disc = 0
+        print("********************************")
+        print(disc)
+        
         discount = True if disc != 0 else False
         subscriptions = SubscriptionType.objects.all().values()
         print(subscriptions)
@@ -491,6 +477,6 @@ def viewProviders(request):
         service_price = request.GET.get('service_price')
         service = ServiceType.objects.get(name=service_name)
         profession = Professions.objects.get(name=service.profession)
-        corporates = CorporateDB.objects.filter(profession=profession, is_active=True)
+        corporates = CorporateDB.objects.filter(profession=profession)
         return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
 
