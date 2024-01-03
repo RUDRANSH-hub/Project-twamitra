@@ -23,4 +23,6 @@ urlpatterns = [
     path("initiatePaymentRequest/",views.initiatePaymentRequest,name="initiatePaymentRequest"),
     path("corporateProfileForm/",views.corporateProfileForm,name="corporateProfileForm"),
     path("viewProviders/",views.viewProviders,name="viewProviders"),
+    path("bookAppointment/",views.bookAppointment,name="bookAppointment"),
+    path("appointmentPaymentHandler/",views.appointmentPaymentHandler,name="appointmentPaymentHandler")
 ]

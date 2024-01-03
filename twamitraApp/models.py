@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from accountApp.models import User
+from django.core.validators import RegexValidator
 
 # Create your models here.
 class SubscriptionType(models.Model):
@@ -33,7 +34,8 @@ class CorporateDB(models.Model):
     experience = models.CharField(max_length=255,null=True)
     address = models.TextField(null=True)
     pan = models.CharField(max_length=20,null=True)
-    alternatePhone = models.CharField(max_length=15,null=True)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    alternatePhone = models.CharField(max_length=15, validators=[phone_regex], null=True)
     profilePic = models.ImageField(upload_to=user_profile_pic_path,null=True)
     signature = models.ImageField(upload_to=user_signature_path,null=True)
     has_paid = models.BooleanField(default=False)
@@ -97,6 +99,36 @@ class ServiceType(models.Model):
     name = models.CharField(max_length=150)
     profession = models.ForeignKey(Professions,on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    
+   
     def __str__(self) -> str:
         return f'{self.name} - {self.profession.name}'
+    
+class CorporateAppointment(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
+    serviceType = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
+    corporate = models.ForeignKey(CorporateDB, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_confirmed = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
+    review = models.TextField(blank=True, null=True)
+    razorpay_order_id = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.customer.email} - {self.serviceType.name} - {self.corporate.businessName}"
+
+    class Meta:
+        ordering = ['created_at', 'updated_at']
+        
+class AppointmentPayment(models.Model):
+    appointment = models.ForeignKey(CorporateAppointment,on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    razorpay_order_id = models.CharField(max_length=255)
+    razorpay_payment_id = models.CharField(max_length=255,null=True)
+    razorpay_signature = models.CharField(max_length=255,null=True)
+    verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self) -> str:
+        return f'{self.appointment.customer.email} - {self.appointment.serviceType.name}'

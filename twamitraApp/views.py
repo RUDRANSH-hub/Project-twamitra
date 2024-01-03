@@ -35,10 +35,10 @@ def corporateRegistration(request):
         password2 = request.POST.get('password2')
         
         if(not name or not email or not phone or not businessName or not profession_name or not location or not password1 or not password2):
-            messages.success(request, "Enter all the fields")
+            messages.error(request, "Enter all the fields")
             return render( request, "corporateRegistration.html")                
         if(password1 != password2):
-            messages.success(request, "Password mismatch!")
+            messages.error(request, "Password mismatch!")
             return render( request, "corporateRegistration.html")                
         profession = Professions.objects.get(name=profession_name)
         profession_mapping = {
@@ -68,7 +68,7 @@ def corporateRegistration(request):
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         except Exception as e:
             print(e)
-            messages.success(request, " Username already Taken! Try With another Username...")
+            messages.error(request, " Username already Taken! Try With another Username...")
             return render( request, "corporateRegistration.html", context)
         return redirect ('corporateDashboard')
     else:
@@ -216,8 +216,13 @@ def initiatePaymentRequest(request):
         amount = request.POST.get('default_price')
         value = request.POST.get('value')
         referralCode = request.POST.get('referralCode')
-        if referralCode == 'None':
+        if referralCode == 'None' or referralCode == '':
             referralCode = None
+        try:
+            new_price = request.POST.get('new_price')
+            amount = new_price
+        except:
+            new_price = None
         print("above all")
         print(request.POST.get('referralCode'))
         print(type(request.POST.get('referralCode')))
@@ -246,11 +251,6 @@ def initiatePaymentRequest(request):
         context['currency'] = "INR"
         context['callback_url'] = callback_url
         
-        if referralCode is not None:
-            print("im ahehbcdjbcsv svlnlvnxvlknk")
-            referCode = GeneratedCode.objects.get(code=referralCode)
-            referCode.is_redeemed = True
-            referCode.save()
         paymentObj = CorporatePayments.objects.create(
             amount = amount,
             cid=corporate,
@@ -326,9 +326,6 @@ def initiatePaymentRequest(request):
 #         return render(request, "confirmPayment.html",context)
 #     else:
 #         return render(request, "corporateRegistration.html",context)
-
-
-
 
 
 @csrf_exempt
@@ -477,6 +474,83 @@ def viewProviders(request):
         service_price = request.GET.get('service_price')
         service = ServiceType.objects.get(name=service_name)
         profession = Professions.objects.get(name=service.profession)
-        corporates = CorporateDB.objects.filter(profession=profession)
+        corporates = CorporateDB.objects.filter(profession=profession,is_active=True)
         return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
+
+
+@login_required(login_url="/auth/loginuser/")
+def bookAppointment(request):
+    if request.method == 'POST' and request.user.is_customer:
+        try:
+            customer = request.user
+            service = request.POST.get('service')
+            cid = request.POST.get('cpid')
+            if not service or not cid:
+                print("hhhhh")
+                messages.error(request,  "Something went wrong! Please try again!")
+                return redirect(request.META.get('HTTP_REFERER', 'consultantServices'))
+            serviceType = ServiceType.objects.get(name=service)
+            corporate = CorporateDB.objects.get(cid=cid)
+            
+            amount = int(serviceType.price)*100            
+            currency = 'INR'
+            data = { "amount": amount, "currency": currency, "notes":{"customer_id":customer.id}}
+            razorpay_order = razorpay_client.order.create(data=data)
+            razorpay_order_id = razorpay_order['id']
+
+            appointment=CorporateAppointment.objects.create(
+                customer=customer,
+                serviceType=serviceType,
+                corporate=corporate,
+                razorpay_order_id = razorpay_order_id
+            )
+            
+            callback_url = 'http://127.0.0.1:8000/appointmentPaymentHandler/'
+            context = {}
+            context['razorpay_order_id'] = razorpay_order_id
+            context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+            context['razorpay_amount'] = amount
+            context['currency'] = "INR"
+            context['callback_url'] = callback_url
+            context['appointment'] = appointment
+            return render(request, 'appointmentConfirmation.html',context)
+        except Exception as e:
+            print("here's an error", e)
+            messages.error(request,  "Something went wrong! Please try again!")
+            return redirect('consultantServices')
+        
+        
+@csrf_exempt
+def appointmentPaymentHandler(request):
+    if request.method == "POST":
+            razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            razorpay_signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+            appointment = CorporateAppointment.objects.get(razorpay_order_id = razorpay_order_id)
+            result = razorpay_client.utility.verify_payment_signature({
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+            })
+            if result is True:
+                with  transaction.atomic():
+                    appointment.is_paid = True
+                    appointment.save()
+                    appointmentPayment = AppointmentPayment.objects.create(
+                        appointment=appointment,
+                        amount=appointment.serviceType.price,
+                        razorpay_order_id = razorpay_order_id,
+                        razorpay_payment_id = razorpay_payment_id,
+                        razorpay_signature = razorpay_signature,
+                        verified = True
+                    )
+                messages.success(request, "Successfully booked the appointment!")
+                return render(request, "appointmentSuccess.html",{"appointment":appointment})        
+    else:
+        return HttpResponseBadRequest()
 

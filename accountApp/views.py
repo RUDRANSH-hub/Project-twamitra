@@ -10,25 +10,24 @@ def dashboard(request):
 
 # Create your views here.
 def registeruser(request):
-    
-    if request.method == "POST":
-      email = request.POST.get("email",None)
-      password1 = request.POST.get("password1",None)
-      password2 = request.POST.get("password2",None)
-      print(email)
-      print(password1)
-      print(password2)
-      if(password1 != password2):
-        messages.success(request, "Password mismatch!")
-        return render( request, "register.html", {"email":email})                
-      try:
-        user = User.objects.create_user(username=email, email=email,password=password1,is_customer=True)
-        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-      except:
-        messages.success(request, " Username already Taken! Try With another Username...")
-        return render( request, "register.html", {"email":email})
-      return redirect ('home')
-    return render( request, "register.html")
+  if request.method == "POST":
+    email = request.POST.get("email",None)
+    password1 = request.POST.get("password1",None)
+    password2 = request.POST.get("password2",None)
+    print(email)
+    print(password1)
+    print(password2)
+    if(password1 != password2):
+      messages.success(request, "Password mismatch!")
+      return render( request, "register.html", {"email":email})                
+    try:
+      user = User.objects.create_user(username=email, email=email,password=password1,is_customer=True)
+      login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+    except:
+      messages.success(request, " Username already Taken! Try With another Username...")
+      return render( request, "register.html", {"email":email})
+    return redirect ('home')
+  return render( request, "register.html")
 
 def loginuser(request):
   if request.user.is_authenticated:
