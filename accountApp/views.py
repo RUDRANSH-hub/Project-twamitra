@@ -49,7 +49,7 @@ def loginuser(request):
     if user is not None:
         login(request, user)
         print("logged in")
-        return redirect('home')
+        return redirect('userDashboard', 'service')
     else:
         messages.error(request,  "Invalid credentials")
           

@@ -5,6 +5,6 @@ from django.contrib.auth.forms import UserCreationForm
 class ProfileForm(ModelForm):
     class Meta:
         model = CorporateDB
-        fields = ['companyName', 'experience', 'address', 'pan','alternatePhone', 'signature','profilePic']
+        fields = ['companyName', 'experience', 'address', 'pan','alternatePhone', 'profilePic']
         
         

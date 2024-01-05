@@ -28,10 +28,6 @@
     column-gap: 1rem;
     margin-bottom:0.7rem;
 }
-.confirmationDetails b{
-    width: max-content;
-}
-
 .confirmationDetails p:last-child{
     margin-bottom:0;
 }

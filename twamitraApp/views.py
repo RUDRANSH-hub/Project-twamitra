@@ -33,7 +33,11 @@ def corporateRegistration(request):
         location = request.POST.get('location')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        
+        accept_terms = request.POST.get('accept_terms')
+        if not accept_terms:
+            messages.error(request, "You must agree to the Terms and Conditions.")
+            return render(request, "corporateRegistration.html", context)
+
         if(not name or not email or not phone or not businessName or not profession_name or not location or not password1 or not password2):
             messages.error(request, "Enter all the fields")
             return render( request, "corporateRegistration.html")                
@@ -63,7 +67,8 @@ def corporateRegistration(request):
                     businessName=businessName,
                     profession=profession,
                     location=location,
-                    is_active=False
+                    is_active=False,
+                    terms_accepted = True
                 )
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         except Exception as e:
@@ -109,32 +114,39 @@ def corporateProfileForm(request):
         experience = request.POST.get('experience')
         address = request.POST.get('address')
         pan = request.POST.get('pan')
+        aadhar = request.POST.get('aadhar')
+        pincode = request.POST.get('pincode')
+        
         alternate_phone = request.POST.get('alternatePhone')
 
         corporate_db.companyName = company_name
         corporate_db.experience = experience
         corporate_db.address = address
+        corporate_db.pincode = pincode
+        corporate_db.aadhar = aadhar
         corporate_db.pan = pan
         corporate_db.alternatePhone = alternate_phone
 
         corporate_db.profilePic = request.FILES.get('profilePic')
-        corporate_db.signature = request.FILES.get('signature')
 
         corporate_db.save()
 
         messages.success(request, 'Profile updated successfully!')
         return redirect('corporateDashboard')
     else:
-        data = {
-        'companyName': corporate_db.companyName,
-        'experience': corporate_db.experience,
-        'address': corporate_db.address,
-        'pan': corporate_db.pan,
-        'alternatePhone': corporate_db.alternatePhone,
-        'signature': corporate_db.signature,
-        'profilePic': corporate_db.profilePic
-        }
-
+        if not corporate_db.companyName == None:
+            data = {
+            'companyName': corporate_db.companyName,
+            'experience': corporate_db.experience,
+            'address': corporate_db.address,
+            'pincode': corporate_db.pincode,
+            'aadhar': corporate_db.aadhar,
+            'pan': corporate_db.pan,
+            'alternatePhone': corporate_db.alternatePhone,
+            'profilePic': corporate_db.profilePic
+            }
+        else:
+            data = {}
         print("gadbad")
     return render(request, 'corporateProfile.html', {'data': data})
 
@@ -213,16 +225,16 @@ def initiatePaymentRequest(request):
     if request.method == 'POST' and request.user.is_corporate:
         user = request.user
         corporate = CorporateDB.objects.get(user=user)
-        amount = request.POST.get('default_price')
+        default_price = request.POST.get('default_price')
         value = request.POST.get('value')
         referralCode = request.POST.get('referralCode')
+        new_price = request.POST.get('new_price')
         if referralCode == 'None' or referralCode == '':
             referralCode = None
-        try:
-            new_price = request.POST.get('new_price')
-            amount = new_price
-        except:
-            new_price = None
+        if new_price == '' or new_price == None:
+            amount = default_price
+        else:
+            amount = default_price
         print("above all")
         print(request.POST.get('referralCode'))
         print(type(request.POST.get('referralCode')))
@@ -389,24 +401,26 @@ def GenerateCode(request):
         return render(request, "Error.html")
     
 
-def servicepage(request):
+def loanBooking(request):
     if request.method == 'POST':
-    # Retrieve data from the POST request
+        customer = request.user
         name = request.POST.get('name')
         email = request.POST.get('email')
         address = request.POST.get('address')
         pincode = request.POST.get('pincode')
         phone = request.POST.get('phone')
-        loan_type = request.POST.get('loan_type')
+        loan_type = request.POST.get('loanType')
         
         # Convert monthly_salary to Decimal
-        monthly_salary= request.POST.get('monthly_salary')
+        monthly_salary= request.POST.get('monthlySalary')
         # monthly_salary = Decimal(monthly_salary_str) if monthly_salary_str else Decimal('0.00')
-        
+        monthly_salary = float(monthly_salary)
+        loan_amount = request.POST.get('loanAmount')
+        loan_amount = float(loan_amount)
         # Convert loan_amount to Decimal
-        loan_amount = request.POST.get('loan_amount')
         # loan_amount = Decimal(loan_amount_str) if loan_amount_str else Decimal('0.00')
         
+        loanType = LoanType.objects.get(name=loan_type)
         # Calculate the annual salary
         try:
             monthly_salary = Decimal(monthly_salary)
@@ -418,13 +432,14 @@ def servicepage(request):
         # print("appliocation start")
         
         # Create a new LoanDetail instance with the received data
-        application = loan_detail(
+        application = LoanDetail(
+            customer=customer,
             name=name,
             email=email,
             address=address,
             pincode=pincode,
             phone=phone,
-            loan_type=loan_type,
+            loan_type=loanType,
             monthly_salary=monthly_salary,
             year_salary=year_salary,
             loan_amount=loan_amount,
@@ -439,7 +454,7 @@ def servicepage(request):
             # Handle the exception, perhaps return an error response
 
         
-        return redirect ("/servicepage") # Redirect to a success page or URL
+        return redirect ("home") # Redirect to a success page or URL
     return render(request, "loanForm/loanForm.html")
   ## currently adding loan only 
 
@@ -468,15 +483,45 @@ def subServices(request,sub):
     services = ServiceType.objects.filter(profession=profession)
     return render(request, "subServices.html", {"services":services, "profession":profession})
 
+# def viewProviders(request):
+#     if request.method == 'GET':
+#         service_name = request.GET.get('service_name')
+#         service_price = request.GET.get('service_price')
+#         service = ServiceType.objects.get(name=service_name)
+#         profession = Professions.objects.get(name=service.profession)
+#         corporates = CorporateDB.objects.filter(profession=profession,is_active=True)
+#         return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
+
 def viewProviders(request):
     if request.method == 'GET':
         service_name = request.GET.get('service_name')
         service_price = request.GET.get('service_price')
+        location_filter = request.GET.get('location')
+        
         service = ServiceType.objects.get(name=service_name)
         profession = Professions.objects.get(name=service.profession)
-        corporates = CorporateDB.objects.filter(profession=profession,is_active=True)
-        return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
+        locations = ['Delhi', 'Noida', 'Jhansi', 'Varanasi']
+        # Filter corporates based on profession and location
+        corporates = CorporateDB.objects.filter(profession=profession, is_active=True)
+        if location_filter:
+            corporates = corporates.filter(location=location_filter)
+        return render(request, 'viewProviders.html', {"corporates": corporates, 'service': service, 'locations': locations, 'location_filter': location_filter})
 
+@login_required(login_url="/auth/loginuser/")
+def userDashboard(request, page):
+    if request.user.is_customer:
+        active = page
+        user = request.user
+        loans = user.loans.all()
+        appointments = user.appointments.filter(is_paid=True)
+        print(loans)
+        print(appointments)
+        context = {"user": user, "loans": loans, "appointments": appointments, "active": active}
+        print(context)
+        return render(request, 'userDashboard.html', context)
+    else:
+        messages.error(request,  "You are not allowed on this page.")
+        return redirect('corporateDashboard')
 
 @login_required(login_url="/auth/loginuser/")
 def bookAppointment(request):
@@ -518,8 +563,11 @@ def bookAppointment(request):
             print("here's an error", e)
             messages.error(request,  "Something went wrong! Please try again!")
             return redirect('consultantServices')
-        
-        
+    else:
+        messages.error(request,  "You are not allowed on this page.")
+        return redirect('consultantServices')
+
+       
 @csrf_exempt
 def appointmentPaymentHandler(request):
     if request.method == "POST":

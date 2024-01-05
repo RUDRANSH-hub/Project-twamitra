@@ -897,14 +897,14 @@ ul {
 .card {
     width: 20rem;
     height: auto;
-    transition: 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .card:hover {
     scale: 1.02;
     /* color:white; */
-    box-shadow: 0 0 10px -2px black;
-    background: linear-gradient(to top, var(--theme-lightYellow-color), white);
+    box-shadow:  0 0 10px -2px black;
+    background: linear-gradient(to top, var(--theme-lightRed-color),white, white);
 }
 
 .card:hover h5 {

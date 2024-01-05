@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block css %}
+  {% block head_css_site %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'stylesheet/userDashboard.css' %}">
+  {% endblock head_css_site %}
+{% endblock css %}
+
+
+{% block content %}
+<div class="userDashboardWrapper">
+    <div class="leftSideBarWrapper">
+        <header class="welcomeHead">
+            <h3>Welcome</h3>
+            <p>{{user.email}}</p>
+        </header>
+        <ul class="sideBar">
+            <li>
+                <a href="{% url 'userDashboard' 'loan'%}">
+                    <img width="22" height="22"
+                        src="https://img.icons8.com/external-smashingstocks-mixed-smashing-stocks/68/ffffff/external-Loan-personal-loan-smashingstocks-mixed-smashing-stocks-5.png"
+                        alt="external-Loan-personal-loan-smashingstocks-mixed-smashing-stocks-5"
+                        alt="external-Loan-personal-loan-smashingstocks-mixed-smashing-stocks-5" /> Loans
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'userDashboard' 'service'%}">
+                    <img width="22" height="22" src="https://img.icons8.com/ios-filled/50/ffffff/permanent-job.png"
+                        alt="permanent-job" />
+                    Services
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img width="22" height="22"
+                        src="https://img.icons8.com/ios-filled/50/ffffff/user-male-circle.png"
+                        alt="user-male-circle" />
+                    Update Profile
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="mainWrapper">
+        {% if active == 'loan' %}
+        {% include 'dashboardLoan.html'%}
+        {% elif active == 'service' %}
+        {% include 'dashboardService.html' %}
+        {% endif %}
+    </div>
+</div>
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
+
+{% endblock %}
