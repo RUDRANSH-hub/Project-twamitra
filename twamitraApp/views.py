@@ -1,6 +1,8 @@
 import random
 from django.shortcuts import render, redirect
 from decimal import Decimal
+
+from chatApp.models import ChatMessage, Thread
 from .models import *
 from .forms import ProfileForm
 import uuid
@@ -85,10 +87,12 @@ def corporateDashboard(request):
     user = User.objects.get(email=request.user.email)
     corporate = CorporateDB.objects.get(user=user)
     services = ServiceType.objects.filter(profession=corporate.profession)
+    threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('created_at')
+
     # if corporate["has_paid"] == False:
     #     corporate["cid"] == "*******"
     print(services)
-    context = {'user': user, 'corporate': corporate,'services': services}
+    context = {'user': user, 'corporate': corporate,'services': services, 'threads': threads}
     return render(request, "corporateDashboard.html", context)
 
 
@@ -505,6 +509,8 @@ def viewProviders(request):
         corporates = CorporateDB.objects.filter(profession=profession, is_active=True)
         if location_filter:
             corporates = corporates.filter(location=location_filter)
+        for corporate in corporates:
+            print(corporate.profilePic)
         return render(request, 'viewProviders.html', {"corporates": corporates, 'service': service, 'locations': locations, 'location_filter': location_filter})
 
 @login_required(login_url="/auth/loginuser/")
@@ -514,9 +520,10 @@ def userDashboard(request, page):
         user = request.user
         loans = user.loans.all()
         appointments = user.appointments.filter(is_paid=True)
+        threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('created_at')
         print(loans)
         print(appointments)
-        context = {"user": user, "loans": loans, "appointments": appointments, "active": active}
+        context = {"user": user, "loans": loans, "appointments": appointments, "active": active, "threads": threads}
         print(context)
         return render(request, 'userDashboard.html', context)
     else:
@@ -589,6 +596,13 @@ def appointmentPaymentHandler(request):
                 with  transaction.atomic():
                     appointment.is_paid = True
                     appointment.save()
+                    thread, created = Thread.objects.get_or_create(appointment=appointment, customer=appointment.customer, corporate=appointment.corporate.user)
+
+                    # Optionally, you can add an initial chat message
+                    initial_message = f"Appointment booked for {appointment.serviceType.name} with {appointment.corporate.businessName}."
+                    ChatMessage.objects.create(thread=thread, sender=appointment.customer, message=initial_message)
+
+
                     appointmentPayment = AppointmentPayment.objects.create(
                         appointment=appointment,
                         amount=appointment.serviceType.price,

@@ -6,6 +6,8 @@
   {% block head_css_site %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'stylesheet/userDashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'stylesheet/chat.css' %}">
+
   {% endblock head_css_site %}
 {% endblock css %}
 
@@ -13,6 +15,10 @@
 {% block content %}
 <div class="userDashboardWrapper">
     <div class="leftSideBarWrapper">
+        <div class="SidebarToggler">
+            <button class="rightArrow">&gt</button>
+            <button class="leftArrow">&lt</button>
+        </div>
         <header class="welcomeHead">
             <h3>Welcome</h3>
             <p>{{user.email}}</p>
@@ -51,6 +57,40 @@
         {% endif %}
     </div>
 </div>
+
+{% include 'chat/chatroom.html'%}
+
+<script>
+    var leftSideBar = document.querySelector(".leftSideBarWrapper");
+    var rightArrow = document.querySelector(".rightArrow");
+    var leftArrow = document.querySelector(".leftArrow");
+
+    function sideBarVisibility() {
+        if (window.innerWidth <= 800) {
+            rightArrow.style.display = "block";
+            leftSideBar.style.left = "-17rem";
+        }
+        else {
+            rightArrow.style.display = "none";
+            leftSideBar.style.left = "0rem";
+        }
+    }
+    rightArrow.addEventListener("click", () => {
+        rightArrow.style.display = "none";
+        leftSideBar.style.left = "0";
+    });
+
+    leftArrow.addEventListener("click", () => {
+        rightArrow.style.display = "block";
+        leftSideBar.style.left = "-17rem";
+    });
+
+    window.addEventListener("resize", () => {
+        sideBarVisibility();
+    });
+
+    sideBarVisibility();
+</script>
 <script src="https://cdn.lordicon.com/lordicon.js"></script>
 
 {% endblock %}

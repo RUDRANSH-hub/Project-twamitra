@@ -6,6 +6,8 @@
 {% block head_css_site %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'stylesheet/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'stylesheet/chat.css' %}">
+
 {% endblock head_css_site %}
 {% endblock css %}
 
@@ -111,6 +113,8 @@
         </div>
     </div>
 </div>
+
+{% include 'chat/chatroom.html'%}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
