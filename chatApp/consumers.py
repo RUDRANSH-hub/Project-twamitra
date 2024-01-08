@@ -111,6 +111,8 @@ class ChatConsumer(AsyncConsumer):
         if not thread_obj:
             print('Error:: Thread id is incorrect')
 
+        is_valid = await self.check_thread_user(thread_obj,sent_by_user,send_to_user)
+                
         await self.create_chat_message(thread_obj, sent_by_user, msg)
 
         other_user_chat_room = f'user_chatroom_{send_to_id}'
@@ -170,3 +172,8 @@ class ChatConsumer(AsyncConsumer):
     @database_sync_to_async
     def create_chat_message(self, thread, user, msg):
         ChatMessage.objects.create(thread=thread, sender=user, message=msg)
+        
+    
+
+
+    
