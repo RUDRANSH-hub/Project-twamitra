@@ -1,6 +1,8 @@
 import random
 from django.shortcuts import render, redirect
 from decimal import Decimal
+
+from chatApp.models import ChatMessage, Thread
 from .models import *
 from .forms import ProfileForm
 import uuid
@@ -33,28 +35,17 @@ def corporateRegistration(request):
         location = request.POST.get('location')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        
+        accept_terms = request.POST.get('accept_terms')
+        if not accept_terms:
+            messages.error(request, "You must agree to the Terms and Conditions.")
+            return render(request, "corporateRegistration.html", context)
+
         if(not name or not email or not phone or not businessName or not profession_name or not location or not password1 or not password2):
-            messages.success(request, "Enter all the fields")
+            messages.error(request, "Enter all the fields")
             return render( request, "corporateRegistration.html")                
         if(password1 != password2):
-            messages.success(request, "Password mismatch!")
+            messages.error(request, "Password mismatch!")
             return render( request, "corporateRegistration.html")                
-        try:
-            referralCode = request.POST.get('referralCode')
-        except:
-            referralCode = None
-            
-        disc = 0
-        if referralCode is not None:
-            try:
-                code_obj = GeneratedCode.objects.get(code=referralCode)
-                if not code_obj.is_redeemed:
-                    disc = int(code_obj.percentage.strip('%'))
-                else:
-                    disc = 0
-            except GeneratedCode.DoesNotExist:
-                disc = 0
         profession = Professions.objects.get(name=profession_name)
         profession_mapping = {
                 'CA': 'C',
@@ -78,13 +69,13 @@ def corporateRegistration(request):
                     businessName=businessName,
                     profession=profession,
                     location=location,
-                    referralCode=referralCode,
-                    is_active=False
+                    is_active=False,
+                    terms_accepted = True
                 )
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         except Exception as e:
             print(e)
-            messages.success(request, " Username already Taken! Try With another Username...")
+            messages.error(request, " Username already Taken! Try With another Username...")
             return render( request, "corporateRegistration.html", context)
         return redirect ('corporateDashboard')
     else:
@@ -96,10 +87,12 @@ def corporateDashboard(request):
     user = User.objects.get(email=request.user.email)
     corporate = CorporateDB.objects.get(user=user)
     services = ServiceType.objects.filter(profession=corporate.profession)
+    threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('created_at')
+
     # if corporate["has_paid"] == False:
     #     corporate["cid"] == "*******"
     print(services)
-    context = {'user': user, 'corporate': corporate,'services': services}
+    context = {'user': user, 'corporate': corporate,'services': services, 'threads': threads}
     return render(request, "corporateDashboard.html", context)
 
 
@@ -125,33 +118,39 @@ def corporateProfileForm(request):
         experience = request.POST.get('experience')
         address = request.POST.get('address')
         pan = request.POST.get('pan')
+        aadhar = request.POST.get('aadhar')
+        pincode = request.POST.get('pincode')
+        
         alternate_phone = request.POST.get('alternatePhone')
 
         corporate_db.companyName = company_name
         corporate_db.experience = experience
         corporate_db.address = address
+        corporate_db.pincode = pincode
+        corporate_db.aadhar = aadhar
         corporate_db.pan = pan
         corporate_db.alternatePhone = alternate_phone
 
         corporate_db.profilePic = request.FILES.get('profilePic')
-        corporate_db.signature = request.FILES.get('signature')
 
         corporate_db.save()
 
         messages.success(request, 'Profile updated successfully!')
-        return redirect('corporateDashboard')  # Replace 'your_redirect_url' with the appropriate URL
+        return redirect('corporateDashboard')
     else:
-        data = {
-        'companyName': corporate_db.companyName,
-        'experience': corporate_db.experience,
-        'address': corporate_db.address,
-        'pan': corporate_db.pan,
-        'alternatePhone': corporate_db.alternatePhone,
-        'signature': corporate_db.signature,
-        'profilePic': corporate_db.profilePic
-        # Add more fields as needed
-        }
-
+        if not corporate_db.companyName == None:
+            data = {
+            'companyName': corporate_db.companyName,
+            'experience': corporate_db.experience,
+            'address': corporate_db.address,
+            'pincode': corporate_db.pincode,
+            'aadhar': corporate_db.aadhar,
+            'pan': corporate_db.pan,
+            'alternatePhone': corporate_db.alternatePhone,
+            'profilePic': corporate_db.profilePic
+            }
+        else:
+            data = {}
         print("gadbad")
     return render(request, 'corporateProfile.html', {'data': data})
 
@@ -199,7 +198,7 @@ def verifyReferralCode(request):
             referralCode = request.POST.get('referralCode')
         except:
             referralCode = None
-            
+        print(referralCode)    
         disc = 0
         if referralCode is not None:
             try:
@@ -210,6 +209,9 @@ def verifyReferralCode(request):
                     disc = 0
             except GeneratedCode.DoesNotExist:
                 disc = 0
+        print("********************************")
+        print(disc)
+        
         discount = True if disc != 0 else False
         subscriptions = SubscriptionType.objects.all().values()
         print(subscriptions)
@@ -227,11 +229,16 @@ def initiatePaymentRequest(request):
     if request.method == 'POST' and request.user.is_corporate:
         user = request.user
         corporate = CorporateDB.objects.get(user=user)
-        amount = request.POST.get('default_price')
+        default_price = request.POST.get('default_price')
         value = request.POST.get('value')
         referralCode = request.POST.get('referralCode')
-        if referralCode == 'None':
+        new_price = request.POST.get('new_price')
+        if referralCode == 'None' or referralCode == '':
             referralCode = None
+        if new_price == '' or new_price == None:
+            amount = default_price
+        else:
+            amount = default_price
         print("above all")
         print(request.POST.get('referralCode'))
         print(type(request.POST.get('referralCode')))
@@ -260,11 +267,6 @@ def initiatePaymentRequest(request):
         context['currency'] = "INR"
         context['callback_url'] = callback_url
         
-        if referralCode is not None:
-            print("im ahehbcdjbcsv svlnlvnxvlknk")
-            referCode = GeneratedCode.objects.get(code=referralCode)
-            referCode.is_redeemed = True
-            referCode.save()
         paymentObj = CorporatePayments.objects.create(
             amount = amount,
             cid=corporate,
@@ -342,9 +344,6 @@ def initiatePaymentRequest(request):
 #         return render(request, "corporateRegistration.html",context)
 
 
-
-
-
 @csrf_exempt
 def paymenthandler(request):
     if request.method == "POST":
@@ -406,24 +405,26 @@ def GenerateCode(request):
         return render(request, "Error.html")
     
 
-def servicepage(request):
+def loanBooking(request):
     if request.method == 'POST':
-    # Retrieve data from the POST request
+        customer = request.user
         name = request.POST.get('name')
         email = request.POST.get('email')
         address = request.POST.get('address')
         pincode = request.POST.get('pincode')
         phone = request.POST.get('phone')
-        loan_type = request.POST.get('loan_type')
+        loan_type = request.POST.get('loanType')
         
         # Convert monthly_salary to Decimal
-        monthly_salary= request.POST.get('monthly_salary')
+        monthly_salary= request.POST.get('monthlySalary')
         # monthly_salary = Decimal(monthly_salary_str) if monthly_salary_str else Decimal('0.00')
-        
+        monthly_salary = float(monthly_salary)
+        loan_amount = request.POST.get('loanAmount')
+        loan_amount = float(loan_amount)
         # Convert loan_amount to Decimal
-        loan_amount = request.POST.get('loan_amount')
         # loan_amount = Decimal(loan_amount_str) if loan_amount_str else Decimal('0.00')
         
+        loanType = LoanType.objects.get(name=loan_type)
         # Calculate the annual salary
         try:
             monthly_salary = Decimal(monthly_salary)
@@ -435,13 +436,14 @@ def servicepage(request):
         # print("appliocation start")
         
         # Create a new LoanDetail instance with the received data
-        application = loan_detail(
+        application = LoanDetail(
+            customer=customer,
             name=name,
             email=email,
             address=address,
             pincode=pincode,
             phone=phone,
-            loan_type=loan_type,
+            loan_type=loanType,
             monthly_salary=monthly_salary,
             year_salary=year_salary,
             loan_amount=loan_amount,
@@ -456,7 +458,7 @@ def servicepage(request):
             # Handle the exception, perhaps return an error response
 
         
-        return redirect ("/servicepage") # Redirect to a success page or URL
+        return redirect ("home") # Redirect to a success page or URL
     return render(request, "loanForm/loanForm.html")
   ## currently adding loan only 
 
@@ -485,12 +487,132 @@ def subServices(request,sub):
     services = ServiceType.objects.filter(profession=profession)
     return render(request, "subServices.html", {"services":services, "profession":profession})
 
+# def viewProviders(request):
+#     if request.method == 'GET':
+#         service_name = request.GET.get('service_name')
+#         service_price = request.GET.get('service_price')
+#         service = ServiceType.objects.get(name=service_name)
+#         profession = Professions.objects.get(name=service.profession)
+#         corporates = CorporateDB.objects.filter(profession=profession,is_active=True)
+#         return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
+
 def viewProviders(request):
     if request.method == 'GET':
         service_name = request.GET.get('service_name')
         service_price = request.GET.get('service_price')
+        location_filter = request.GET.get('location')
+        
         service = ServiceType.objects.get(name=service_name)
         profession = Professions.objects.get(name=service.profession)
+        locations = ['Delhi', 'Noida', 'Jhansi', 'Varanasi']
+        # Filter corporates based on profession and location
         corporates = CorporateDB.objects.filter(profession=profession, is_active=True)
-        return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
+        if location_filter:
+            corporates = corporates.filter(location=location_filter)
+        for corporate in corporates:
+            print(corporate.profilePic)
+        return render(request, 'viewProviders.html', {"corporates": corporates, 'service': service, 'locations': locations, 'location_filter': location_filter})
+
+@login_required(login_url="/auth/loginuser/")
+def userDashboard(request, page):
+    if request.user.is_customer:
+        active = page
+        user = request.user
+        loans = user.loans.all()
+        appointments = user.appointments.filter(is_paid=True)
+        threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('created_at')
+        print(loans)
+        print(appointments)
+        context = {"user": user, "loans": loans, "appointments": appointments, "active": active, "threads": threads}
+        print(context)
+        return render(request, 'userDashboard.html', context)
+    else:
+        messages.error(request,  "You are not allowed on this page.")
+        return redirect('corporateDashboard')
+
+@login_required(login_url="/auth/loginuser/")
+def bookAppointment(request):
+    if request.method == 'POST' and request.user.is_customer:
+        try:
+            customer = request.user
+            service = request.POST.get('service')
+            cid = request.POST.get('cpid')
+            if not service or not cid:
+                print("hhhhh")
+                messages.error(request,  "Something went wrong! Please try again!")
+                return redirect(request.META.get('HTTP_REFERER', 'consultantServices'))
+            serviceType = ServiceType.objects.get(name=service)
+            corporate = CorporateDB.objects.get(cid=cid)
+            
+            amount = int(serviceType.price)*100            
+            currency = 'INR'
+            data = { "amount": amount, "currency": currency, "notes":{"customer_id":customer.id}}
+            razorpay_order = razorpay_client.order.create(data=data)
+            razorpay_order_id = razorpay_order['id']
+
+            appointment=CorporateAppointment.objects.create(
+                customer=customer,
+                serviceType=serviceType,
+                corporate=corporate,
+                razorpay_order_id = razorpay_order_id
+            )
+            
+            callback_url = 'http://127.0.0.1:8000/appointmentPaymentHandler/'
+            context = {}
+            context['razorpay_order_id'] = razorpay_order_id
+            context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+            context['razorpay_amount'] = amount
+            context['currency'] = "INR"
+            context['callback_url'] = callback_url
+            context['appointment'] = appointment
+            return render(request, 'appointmentConfirmation.html',context)
+        except Exception as e:
+            print("here's an error", e)
+            messages.error(request,  "Something went wrong! Please try again!")
+            return redirect('consultantServices')
+    else:
+        messages.error(request,  "You are not allowed on this page.")
+        return redirect('consultantServices')
+
+       
+@csrf_exempt
+def appointmentPaymentHandler(request):
+    if request.method == "POST":
+            razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            razorpay_signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+            appointment = CorporateAppointment.objects.get(razorpay_order_id = razorpay_order_id)
+            result = razorpay_client.utility.verify_payment_signature({
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+            })
+            if result is True:
+                with  transaction.atomic():
+                    appointment.is_paid = True
+                    appointment.save()
+                    thread, created = Thread.objects.get_or_create(appointment=appointment, customer=appointment.customer, corporate=appointment.corporate.user)
+
+                    # Optionally, you can add an initial chat message
+                    initial_message = f"Appointment booked for {appointment.serviceType.name} with {appointment.corporate.businessName}."
+                    ChatMessage.objects.create(thread=thread, sender=appointment.customer, message=initial_message)
+
+
+                    appointmentPayment = AppointmentPayment.objects.create(
+                        appointment=appointment,
+                        amount=appointment.serviceType.price,
+                        razorpay_order_id = razorpay_order_id,
+                        razorpay_payment_id = razorpay_payment_id,
+                        razorpay_signature = razorpay_signature,
+                        verified = True
+                    )
+                messages.success(request, "Successfully booked the appointment!")
+                return render(request, "appointmentSuccess.html",{"appointment":appointment})        
+    else:
+        return HttpResponseBadRequest()
 

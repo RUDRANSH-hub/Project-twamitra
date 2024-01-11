@@ -45,16 +45,11 @@
                 </div>
             </div>
         </div>
-
-        <form action="" method="POST" onsubmit="return checkConfirmPasswordOnBlur();">
+        <form action="" method="POST" >
             <div class="regLog">
-                <a href="{% url 'corporate-registration' %}">
-                    <button class="reg regLogbtn" type="button" style="color: var(--text-gray-color);"><h3>Register</h3></button>
-                </a>
+                <button class="reg regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3><a href="{% url 'corporate-registration' %}">Register</a></h3></button>
                 <div class="vl"></div>
-                <a href="{% url 'corporateLogin' %}">
-                    <button class="log regLogbtn" type="button" style="background-color: var(--theme-lightRed-color);"><h3>Login</h3></button>
-                </a>
+                <button class="log regLogbtn" type="button" style="color: var(--text-gray-color);"><h3><a href="{% url 'corporateLogin' %}">Login</a></h3></button>
             </div>
             {% csrf_token %}
             <div class="form-outline" data-mdb-input-init>
@@ -76,28 +71,33 @@
                 <label class="form-label" for="form12">Mail ID</label>
             </div>
             <div class="form-outline" data-mdb-input-init>
-                <input type="number" name="phone" id="form12" class="form-control" />
+                <input type="text" name="phone" id="form12" class="form-control" />
                 <label class="form-label" for="form12">Mobile no.</label>
-            </div>
-            <div class="form-outline" data-mdb-input-init>
-                <input type="text" name="referralCode" id="form12" class="form-control" />
-                <label class="form-label" for="form12">Referral code</label>
             </div>
             <select class="form-select" name="location" aria-label="Default select example">
                 <option selected disabled value="">Location</option>
-                <option value="delhi">Delhi</option>
-                <option value="noida">Noida</option>
-                <option value="varanasi">Varanasi</option>
-                <option value="jhansi">Jhansi</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Noida">Noida</option>
+                <option value="Varanasi">Varanasi</option>
+                <option value="Jhansi">Jhansi</option>
             </select>
             <div class="form-outline" data-mdb-input-init>
-                <input type="password" name="password1" id="form12" class="form-control" />
-                <label class="form-label" for="form12">Password</label>
+                <input type="password" name="password1" id="password" class="form-control" />
+                <label class="form-label" for="password">Password</label>
             </div>
             <div class="form-outline" data-mdb-input-init>
-                <input type="password" name="password2" id="form12" class="form-control" />
-                <label class="form-label" for="form12">Confirm Password</label>
+                <input type="password" oninput="checkConfirmPasswordOnBlur();" name="password2" id="confirmPassword" class="form-control" />
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
             </div>
+            <p id="confirmPasswordMessage" style="display: none; color: red;"></p>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="accept_terms" id="acceptTermsCheckbox" required>
+                <label class="form-check-label" for="acceptTermsCheckbox">
+                    I agree to the Terms and Conditions
+                </label>
+            </div>
+
             <div>
                 <center>
                     <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Submit</button>
@@ -125,32 +125,6 @@
             submitButton.disabled = false;
         }
     }
-
-    async function fetchVerification() {
-        var verifyStatus = document.getElementById('verifyStatus');
-        url = "yePeUrlAyega";
-        // var result = false;
-        // var result = true;
-        try {
-            const result = await fetch(url);
-            if (result) {
-                verifyStatus.style.display = "block";
-                verifyStatus.innerText = 'Verified';
-                verifyStatus.style.color = "green"
-            }
-            else {
-                verifyStatus.style.display = "block";
-                verifyStatus.innerText = 'Wrong Code';
-                verifyStatus.style.color = "red"
-            }
-        }
-        catch {
-            console.log("Error while fetching API");
-        }
-
-    }
-
-
 </script>
 
 

@@ -24,19 +24,19 @@ SECRET_KEY = 'django-insecure-*=dc1x-hrz_)j4r*d5!dkp3027_xdz@989zchb@ed!p--&6-xu
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'DEBUG',
+#     },
+# }
 ALLOWED_HOSTS = ['*']
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
@@ -47,14 +47,19 @@ ACCOUNT_EMAIL_REQUIRED = True
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # custom apps
+    'chatApp',
     'twamitraApp',
     'accountApp',
+
 
     # socail
     'allauth',
@@ -95,7 +100,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'twamitra.wsgi.application'
+# WSGI_APPLICATION = 'twamitra.wsgi.application'
+ASGI_APPLICATION = 'twamitra.asgi.application'
 
 
 # Database
@@ -188,3 +194,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 RAZOR_KEY_ID = 'rzp_test_uyZ3f8nCMwpNY6'
 RAZOR_KEY_SECRET = 'JsAv3yVNM7VOOTKB7MDsLigo'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        # 'CONFIG': {
+        #     'hosts': [('127.0.0.1', 6379)],
+        # }
+    }
+}

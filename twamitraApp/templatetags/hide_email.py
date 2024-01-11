@@ -10,4 +10,3 @@ def hide_email(email):
         hidden_username = username[0] + '*' * (len(username) - 1)
         return f"{hidden_username}@{domain}"
     return email
-

@@ -1,29 +1,27 @@
-.corporateRegWrapper{
+.corporateRegWrapper {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 3rem;
-  padding-block:8rem 3rem;
+  padding-top: 7rem;
+  padding-bottom: 2rem;
   padding-inline: 3rem;
 }
 
 
 .corporateRegForm {
-
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.211);
-  /* height: 45rem; */
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   background-color: rgba(255, 255, 255, 0.896);
   border-radius: 10px;
 }
-.corporateRegImg{
+
+.corporateRegImg {
   border-radius: 10px 0 0 10px;
   width: 50%;
-  /* background: linear-gradient(to bottom, var(--theme-red-color) ,#336699d7, white); */
   background: var(--theme-red-color);
   background-size: 100% 100%;
   color: white;
@@ -33,10 +31,10 @@
   animation-timing-function: ease-in-out;
   animation-duration: 20s;
   animation-iteration-count: infinite;
-  animation-direction:alternate;
+  animation-direction: alternate;
 }
 
-.corporateRegForm form{
+.corporateRegForm form {
   width: 50%;
   /* height: max-content; */
   display: flex;
@@ -44,35 +42,50 @@
   gap: 1rem;
   padding: 2rem;
 }
-.regLog{
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 1rem;
-margin-bottom: 2rem;
+
+.regLog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
-.regLogbtn{
-/* padding: 0.5rem 0; */
-padding-top: 0.5rem;
-width: 50%;
-text-align: center;
-vertical-align: middle;
-background-color: white;
-border-radius: 10px;
+.regLogbtn h3{
+  height: 100%;
 }
-.regLogbtn:hover{
-background-color: var(--theme-lightRed-color);
+.regLogbtn  a{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.logForm .regLog{
+  margin-bottom: 2rem;
+}
+
+.regLogbtn {
+  /* padding: 0.5rem 0; */
+  padding-top: 0.5rem;
+  width: 50%;
+  text-align: center;
+  vertical-align: middle;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.regLogbtn:hover {
+  background-color: var(--theme-lightRed-color);
 }
 
 .vl {
-border-left: 2px solid var(--theme-red-color);
-height: 3rem;
+  border-left: 2px solid var(--theme-red-color);
+  height: 3rem;
 }
-.corporateRegForm label{
+
+.corporateRegForm label {
   margin-top: 7px;
 }
 
-.cpinfo{
+.cpinfo {
   padding: 3rem;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -83,9 +96,12 @@ height: 3rem;
   /* width: 100%; */
   height: 100%;
 }
-.corporateFormDetails ul{
+
+.corporateFormDetails ul {
   list-style-type: disc;
-}.corporateFormDetails ul li{
+}
+
+.corporateFormDetails ul li {
   margin-bottom: 1rem;
 
 }
@@ -93,29 +109,34 @@ height: 3rem;
 .corporateRegForm input {
   margin-top: 5px;
 }
-.corporateRegForm .btn{
-  margin-top: 2rem;
+
+.corporateRegForm .btn {
+  margin-top: 0.5rem;
   padding-inline: 4rem;
 }
 
 
-.refCode{
-display: flex;
-justify-content: center;
-align-items: center;
+.refCode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.refVerfiy{
-color: var(--theme-red-color);
-background-color: white;
-padding-inline: 1rem;
+
+.refVerfiy {
+  color: var(--theme-red-color);
+  background-color: white;
+  padding-inline: 1rem;
 }
-.anim{
+
+.anim {
   position: absolute;
   /* background-color: aqua; */
-  width: 100%;flex-direction: row;
+  width: 100%;
+  flex-direction: row;
   overflow: hidden;
   height: 100%;
 }
+
 .cube {
   position: absolute;
   width: 10px;
@@ -124,8 +145,10 @@ padding-inline: 1rem;
   transform-origin: top left;
   transform: scale(0) rotate(0deg) translate(-50%, -50%);
   opacity: 1;
-  -webkit-animation: cube 15s ease-in forwards infinite; /* Increased duration for slower rotation */
-          animation: cube 15s ease-in forwards infinite; /* Increased duration for slower rotation */
+  -webkit-animation: cube 15s ease-in forwards infinite;
+  /* Increased duration for slower rotation */
+  animation: cube 15s ease-in forwards infinite;
+  /* Increased duration for slower rotation */
 }
 
 .cube:nth-child(2n) {
@@ -134,35 +157,35 @@ padding-inline: 1rem;
 
 .cube:nth-child(2) {
   -webkit-animation-delay: 2s;
-          animation-delay: 2s;
+  animation-delay: 2s;
   left: 25%;
   top: 40%;
 }
 
 .cube:nth-child(3) {
   -webkit-animation-delay: 1s;
-          animation-delay: 1s;
+  animation-delay: 1s;
   left: 75%;
   top: 50%;
 }
 
 .cube:nth-child(4) {
   -webkit-animation-delay: 3s;
-          animation-delay: 3s;
+  animation-delay: 3s;
   left: 90%;
   top: 10%;
 }
 
 .cube:nth-child(5) {
   -webkit-animation-delay: 4s;
-          animation-delay: 4s;
+  animation-delay: 4s;
   left: 10%;
   top: 85%;
 }
 
 .cube:nth-child(6) {
   -webkit-animation-delay: 0s;
-          animation-delay: 0s;
+  animation-delay: 0s;
   left: 50%;
   top: 10%;
 }
@@ -172,8 +195,10 @@ padding-inline: 1rem;
     transform: scale(1) rotate(0deg) translate(-50%, -50%);
     opacity: 1;
   }
+
   to {
-    transform: scale(25) rotate(720deg) translate(-50%, -50%); /* Slower rotation */
+    transform: scale(25) rotate(720deg) translate(-50%, -50%);
+    /* Slower rotation */
     opacity: 0;
   }
 }
@@ -183,8 +208,10 @@ padding-inline: 1rem;
     transform: scale(1) rotate(0deg) translate(-50%, -50%);
     opacity: 1;
   }
+
   to {
-    transform: scale(25) rotate(720deg) translate(-50%, -50%); /* Slower rotation */
+    transform: scale(25) rotate(720deg) translate(-50%, -50%);
+    /* Slower rotation */
     opacity: 0;
   }
 }
@@ -193,17 +220,43 @@ padding-inline: 1rem;
 
 
 @media screen and (max-width:720px) {
+  .corporateRegWrapper {
+    padding-inline: 1rem;
+  }
   .corporateRegForm {
-      flex-direction: column;
-      height: max-content;
-      
+    flex-direction: column;
+    height: max-content;
+
   }
-  .corporateRegForm form{
+
+  .corporateRegForm form {
     width: 100%;
+    padding: 1rem;
+    padding-bottom: 2rem;
   }
-  .corporateRegImg{
+  
+  .corporateRegImg {
     width: 100%;
     background: var(--theme-red-color);
-      border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0 0;
+  }
+  .cpinfo {
+    padding: 2rem;
+  }
+  .cpinfo h1{
+    font-size: 1.3rem;
+  }
+  .cpinfo p{
+    font-size: 0.8rem;
+  }
+  .corporateFormDetails ul li {
+    margin-bottom: 0.2rem;
+  
+  }
+  .cpinfo li{
+    font-size: 0.8rem;
+  }
+  .logForm .regLog{
+    margin-bottom: 1rem;
   }
 }

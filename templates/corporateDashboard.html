@@ -6,6 +6,8 @@
 {% block head_css_site %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'stylesheet/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'stylesheet/chat.css' %}">
+
 {% endblock head_css_site %}
 {% endblock css %}
 
@@ -55,10 +57,6 @@
                     <td class="detailsInfo">{{user.phone}}</td>
                 </tr>
                 <tr class="detailsRow">
-                    <td class="detailsTitle">Referral code </td>
-                    <td class="detailsInfo">{{corporate.referralCode}}</td>
-                </tr>
-                <tr class="detailsRow">
                     <td class="detailsTitle">Location</td>
                     <td class="detailsInfo">{{corporate.location}}</td>
                 </tr>
@@ -80,8 +78,6 @@
         </div>
     </main>
 
-   
-
 </div>
 <div class="packagePromptWrapper">
     <div class="prompt">
@@ -101,6 +97,7 @@
                     <div class="form-outline refInput">
                         <input
                             type="text"
+                            name="referralCode"
                             id="referralCode"
                             class="form-control"
                             oninput="updateVerifyButton()"
@@ -116,6 +113,8 @@
         </div>
     </div>
 </div>
+
+{% include 'chat/chatroom.html'%}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

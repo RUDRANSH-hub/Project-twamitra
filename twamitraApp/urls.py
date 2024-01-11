@@ -4,8 +4,9 @@ from . import views
 urlpatterns = [
     path("", views.index, name="home"),
     path("corporate-registration/", views.corporateRegistration, name="corporate-registration"),
+    path("dashboard/<str:page>/", views.userDashboard, name="userDashboard"),
     path("save_generated_code/", views.GenerateCode, name="codegeneration"),
-    path("servicepage/",views.servicepage,name="servicepage"),
+    path("loanBooking/",views.loanBooking,name="loanBooking"),
     path("payment-handler/",views.paymenthandler,name="paymenthandler"),
     path("carLoan/",views.carLoan,name="carLoan"),
     path("personalLoan/",views.personalLoan,name="personalLoan"),
@@ -23,4 +24,6 @@ urlpatterns = [
     path("initiatePaymentRequest/",views.initiatePaymentRequest,name="initiatePaymentRequest"),
     path("corporateProfileForm/",views.corporateProfileForm,name="corporateProfileForm"),
     path("viewProviders/",views.viewProviders,name="viewProviders"),
+    path("bookAppointment/",views.bookAppointment,name="bookAppointment"),
+    path("appointmentPaymentHandler/",views.appointmentPaymentHandler,name="appointmentPaymentHandler")
 ]

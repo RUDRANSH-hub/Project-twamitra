@@ -30,16 +30,21 @@
             <label class="form-label" for="form12">Address</label>
         </div> 
         <div class="form-outline" data-mdb-input-init>
-            <input type="number" name="pan" id="form12" class="form-control" value="{{data.pan}}" required />
-            <label class="form-label" for="form12">Pan no</label>
+            <input type="text" name="pincode" id="form12" class="form-control" value="{{data.pincode}}" required />
+            <label class="form-label" for="form12">Pincode</label>
+        </div> 
+        <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="aadhar" id="form12" class="form-control" value="{{data.aadhar}}" required />
+            <label class="form-label" for="form12">Aadhar no</label>
         </div>
         <div class="form-outline" data-mdb-input-init>
-            <input type="number" name="alternatePhone" id="form12" class="form-control" value="{{data.alternatePhone}}" required />
-            <label class="form-label" for="form12">Alternate mobile no</label>
+            <input type="text" name="pan" id="form12" class="form-control" value="{{data.pan}}" required />
+            <label class="form-label" for="form12">Pan no</label>
         </div>
-        <div>
-            <label class="form-label" for="customFile">Upload Signature</label>
-            <input type="file" name="signature" class="form-control" id="customFile" value="{{data.signature}}" required />
+
+        <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="alternatePhone" id="form12" class="form-control" value="{{data.alternatePhone}}" required />
+            <label class="form-label" for="form12">Alternate mobile no</label>
         </div>
         <div>
             <label class="form-label" for="customFile">Upload Profile Photo</label>
