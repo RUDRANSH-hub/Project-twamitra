@@ -63,6 +63,12 @@
             </ul>
             <div class="navbar__buttons">
                 {% if request.user.is_authenticated %}
+                {% if request.user.is_customer %}
+                <a href="{% url 'userDashboard' 'service' %}"><button class="corporateRegBtn" >Dashboard</button></a>
+                {% else %}
+                <a href="{% url 'corporateDashboard' %}"><button class="corporateRegBtn" >Dashboard</button></a>
+                {% endif %}
+
                 <a href="{% url 'logout' %}"><button class="btn btn-outline-white" >Logout</button></a>
                 {% else %}
                 <a class="corporateRegLink" href="{% url 'corporate-registration' %}">
@@ -104,7 +110,9 @@
 
             // Close the previously opened dropdown
             if (openDropdown && openDropdown !== toggleButton) {
-                openDropdown.firstElementChild.lastElementChild.classList.remove("up");
+                if (openDropdown.firstElementChild.lastElementChild.classList.contains("up")){
+                    openDropdown.firstElementChild.lastElementChild.classList.remove("up");
+                }
                 openDropdown.lastElementChild.classList.remove("open");
             }
 
@@ -118,7 +126,9 @@
 
     document.body.addEventListener("click", () => {
         toggleButtons.forEach((toggleButton) => {
-            toggleButton.firstElementChild.lastElementChild.classList.remove("up");
+            if(toggleButton.firstElementChild.lastElementChild.classList.contains("up")){
+                toggleButton.firstElementChild.lastElementChild.classList.remove("up");
+            }
             toggleButton.lastElementChild.classList.remove("open");
         });
 

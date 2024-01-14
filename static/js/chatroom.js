@@ -1,15 +1,27 @@
-let input_message = $('#message-input')
+// function getActiveForm(){
+//     const activeSpecificChat = document.querySelector('.specificChat.is_active');
+//     const send_message_form = activeSpecificChat ? activeSpecificChat.querySelector('#send-message-form') : null;
+//     return send_message_form
+// }
+// function getActiveInput(){
+//     const activeSpecificChat = document.querySelector('.specificChat.is_active');
+//     const input_message = activeSpecificChat ? activeSpecificChat.querySelector('#message-input') : null;
+//     return input_message
+// }
+
 let message_body = $('.chatContainer')
+let input_message = $('#message-input')
 let send_message_form = $('#send-message-form')
 const USER_ID = $('#logged-in-user').val()
-
+    
 let loc = window.location
 let wsStart = 'ws://'
 
 if(loc.protocol === 'https') {
     wsStart = 'wss://'
 }
-// let endpoint = wsStart + loc.host + loc.pathname
+// let endpoint = `${wsStart}${loc.host}/ws/chat/`
+
 let endpoint = "ws://127.0.0.1:8000/ws/chat/"
 
 const socket = new WebSocket(endpoint);

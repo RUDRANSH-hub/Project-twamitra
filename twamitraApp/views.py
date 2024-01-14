@@ -16,6 +16,7 @@ from django.contrib.auth import logout, authenticate , login
 from django.db import transaction
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .decorators import is_corporate_user
+from django.db.models import Max
 
 
 razorpay_client = razorpay.Client(
@@ -87,12 +88,17 @@ def corporateDashboard(request):
     user = User.objects.get(email=request.user.email)
     corporate = CorporateDB.objects.get(user=user)
     services = ServiceType.objects.filter(profession=corporate.profession)
-    threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('created_at')
+    threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('-created_at')
+    last_messages = []
+
+    for thread in threads:
+        last_message = thread.messages.aggregate(Max('timestamp'))['timestamp__max']
+        last_messages.append({'thread_id': thread.id, 'last_message': last_message})
 
     # if corporate["has_paid"] == False:
     #     corporate["cid"] == "*******"
     print(services)
-    context = {'user': user, 'corporate': corporate,'services': services, 'threads': threads}
+    context = {'user': user, 'corporate': corporate,'services': services, 'threads': threads, 'last_messages': last_messages}
     return render(request, "corporateDashboard.html", context)
 
 
@@ -520,7 +526,7 @@ def userDashboard(request, page):
         user = request.user
         loans = user.loans.all()
         appointments = user.appointments.filter(is_paid=True)
-        threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('created_at')
+        threads = Thread.objects.by_user(user=user).prefetch_related('messages').order_by('-created_at')
         print(loans)
         print(appointments)
         context = {"user": user, "loans": loans, "appointments": appointments, "active": active, "threads": threads}

@@ -1,4 +1,6 @@
 {% load static %}
+{% load get_last_message %}
+
 {% if user.is_authenticated %}
 <input type="hidden" id="logged-in-user" value="{{ request.user.id }}">
 {% endif %}
@@ -26,8 +28,13 @@
                         {% else %}
                         <p class="chatName"><b>{{thread.customer}}</b></p>
                         {% endif %}
-                        <p class="chatLastMsg">Hi, This is Abhishek this side. You were absent in the OOSD and DBMS
-                            examination.</p>
+                        
+                        {% with last_message=thread|get_last_message %}
+                        {% if last_message %}
+                            <p class="chatLastMsg">{{ last_message.message }}</p>
+                        {% endif %}
+                    {% endwith %}
+                        
                     </div>
                     <div class="newMsg">
                         <i class="fas fa-circle"></i>
@@ -35,30 +42,7 @@
                 </a>
             </li>
             {% endfor %}
-            <li class="chatDetials" chat-id="2">
-                <a href="#">
-                    <img src="https://st.depositphotos.com/1008939/2240/i/450/depositphotos_22408839-stock-photo-serious.jpg"
-                        alt="">
-                    <div class="chatContent">
-                        <p class="chatName"><b>Abhishek Goyal 2</b></p>
-                        <p class="chatLastMsg">Hi, This is Abhishek this side. You were absent in the OOSD and DBMS
-                            examination.</p>
-                    </div>
-                </a>
-            </li>
-            <li class="chatDetials" chat-id="3">
-                <a href="#">
-                    <img src="https://st.depositphotos.com/1008939/2240/i/450/depositphotos_22408839-stock-photo-serious.jpg"
-                        alt="">
-                    <div class="chatContent">
-                        <p class="chatName"><b>Abhishek Goyal 3</b></p>
-                        <p class="chatLastMsg">Hi, This is Abhishek this side. You were absent in the OOSD and DBMS
-                            examination.</p>
-                    </div>
-                </a>
-            </li>
         </ul>
-        
     </div>
     {% for thread in threads %}
     <div class="specificChat hide" chat-id="chat_{{ thread.id }}" other-user-id="
@@ -100,13 +84,13 @@
                 {% endif %}
                 {% endfor %}
             </div>
-            <form class="inputChatContainer" id="send-message-form">
-                <input type="text" placeholder="Type here" id="message-input">
-                <button type="submit" class="inpMsgsubmitBtn" ><i class="far fa-paper-plane"></i></button>
-            </form>
         </div> 
     </div>
     {% endfor%}
+    <form class="inputChatContainer" id="send-message-form">
+        <input type="text" placeholder="Type here" id="message-input">
+        <button type="submit" class="inpMsgsubmitBtn" ><i class="far fa-paper-plane"></i></button>
+    </form>
 </div>
 
 <script>
@@ -115,6 +99,7 @@
     // var closeChat = document.querySelector(".closeChat");
     // var closeSpecificChat = document.getElementById("closeSpecificChat");
     var specificChats = document.querySelectorAll(".specificChat");
+    var inputChatContainer = document.getElementById("send-message-form");
 
 
     // if (window.innerWidth <= 480) {
@@ -154,8 +139,8 @@
 
     function closeSpecificChat(){
         specificChats.forEach(chat => {
-
             chat.classList.remove('is_active');
+            inputChatContainer.style.display = "none"
         })
     }
 
@@ -177,6 +162,8 @@ function hideAllSpecificChats() {
     specificChats.forEach(chat => {
         if(chat.classList.contains('is_active')){
             chat.classList.remove('is_active');
+            inputChatContainer.style.display = "none"
+
         }
     });
 }
@@ -185,6 +172,12 @@ function showSpecificChatById(chatId) {
     const specificChat = document.querySelector(`.specificChat[chat-id="${chatId}"]`);
     if (specificChat) {
         specificChat.classList.add('is_active');
+        inputChatContainer.style.display = "grid"
+
+        //let input_message = getActiveInput();
+        //let send_message_form = getActiveForm();
+        //console.log(send_message_form)
+        //console.log(input_message)
     }
 }
 
