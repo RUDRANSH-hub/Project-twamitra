@@ -54,44 +54,46 @@
             </div>
             <!-- <img src="/img/carLoan.png" alt=""> -->
         </div>
-        <form action="#">
+        <form action="{% url 'loanBooking' %}" method="POST">
+            {% csrf_token %}
             <center>    
                 <h3>Personal Loan</h3>
             </center>
             <div class="form-outline" data-mdb-input-init>
-                <input type="text" id="form12" class="form-control" />
+                <input type="text" name="name" id="form12" class="form-control"  required />
                 <label class="form-label " for="form12">Name</label>
             </div>
             <div class="form-outline" data-mdb-input-init>
-                <input type="email" id="form12" class="form-control" />
+                <input type="email" name="email" id="form12" class="form-control" required />
                 <label class="form-label" for="form12">Email</label>
             </div>
             <div class="form-outline" data-mdb-input-init>
-                <input type="text" id="form12" class="form-control" />
+                <input type="text" name="address" id="form12" class="form-control" required />
                 <label class="form-label " for="form12">Address</label>
             </div>
             <div class="phonePin">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="number" id="form12" class="form-control" />
+                    <input type="number" name="pincode" id="form12" class="form-control" required />
                     <label class="form-label" for="form12">Pin Code</label>
                 </div>
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="number" id="form12" class="form-control" />
+                    <input type="number" name="phone" id="form12" class="form-control" required />
                     <label class="form-label" for="form12">Phone</label>
                 </div>
             </div>
+            <input type="hidden" name="loanType" value="personalLoan">
             <div class="form-outline" data-mdb-input-init>
-                <input type="number" id="form12" class="form-control" />
+                <input type="number" name="monthlySalary" id="form12" class="form-control" required />
                 <label class="form-label" for="form12">Monthly Salary</label>
             </div>
             <div class="form-outline" data-mdb-input-init>
-                <input type="number" id="form12" class="form-control" />
+                <input type="number" name="loanAmount" id="form12" class="form-control" required />
                 <label class="form-label" for="form12">Loan Amount</label>
             </div>
             <div>
-                <button type="button" class="btn btn-primary" data-mdb-ripple-init>Submit</button>
+                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Submit</button>
             </div>
-        </form>
+    </form>
 
     </div>
 </section>

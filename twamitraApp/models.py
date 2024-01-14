@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from accountApp.models import User
 from django.core.validators import RegexValidator
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your models here.
 class SubscriptionType(models.Model):
@@ -100,7 +102,18 @@ class GeneratedCode(models.Model):
     percentage = models.CharField(max_length=20, choices=PERCENTAGE_CHOICES,null=False,default='25%')
     is_redeemed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    expiration_datetime = models.DateTimeField()  # Add this field
     is_expired = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        # Set expiration_datetime to 48 hours from now when creating or updating the code
+        if not self.expiration_datetime:
+            self.expiration_datetime = timezone.now() + timedelta(hours=48)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.code
+
             
     def __str__(self):
         return self.code

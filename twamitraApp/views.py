@@ -10,12 +10,12 @@ from datetime import datetime, timedelta
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate , login
 from django.db import transaction
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .decorators import is_corporate_user
+from .decorators import is_corporate_user, is_customer
 from django.db.models import Max
 
 
@@ -85,6 +85,9 @@ def corporateRegistration(request):
 # @user_passes_test(is_corporate_user)
 @login_required(login_url='/corporateLogin/')
 def corporateDashboard(request):
+    if not is_corporate_user(request.user):
+        return HttpResponseForbidden("Access forbidden for non-corporate users.")
+
     user = User.objects.get(email=request.user.email)
     corporate = CorporateDB.objects.get(user=user)
     services = ServiceType.objects.filter(profession=corporate.profession)
@@ -102,6 +105,7 @@ def corporateDashboard(request):
     return render(request, "corporateDashboard.html", context)
 
 
+@login_required(login_url='/corporateLogin/')
 def checkReferralCode(request, referralCode):
     code = referralCode
     try:
@@ -111,11 +115,18 @@ def checkReferralCode(request, referralCode):
     
     if referralCode.is_redeemed:
         return JsonResponse({"status": False, "message": "Code already redeemed!"})
+    if referralCode.expiration_datetime and referralCode.expiration_datetime < timezone.now():
+        referralCode.is_expired = True
+        referralCode.save()
+        return JsonResponse({"status": False, "message": "Code has expired!"})
     else:
         return JsonResponse({"status": True, "message": "Verified!"})
 
 @login_required(login_url='/corporateLogin/')
 def corporateProfileForm(request):
+    if not is_corporate_user(request.user):
+        return HttpResponseForbidden("Access forbidden for non-corporate users.")
+
     corporate_db = CorporateDB.objects.get(user=request.user)
     if request.method == 'POST':
 
@@ -196,9 +207,12 @@ def corporateLogout(request):
   logout(request)
   return redirect('home')
 
-# @login_required(login_url="corporateLogin")
+@login_required(login_url="/corporateLogin/")
 def verifyReferralCode(request):
     print("******IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII ****")
+    if not is_corporate_user(request.user):
+        return HttpResponseForbidden("Access forbidden for non-corporate users.")
+
     if request.method == 'POST'and request.user.is_corporate:
         try:
             referralCode = request.POST.get('referralCode')
@@ -209,7 +223,11 @@ def verifyReferralCode(request):
         if referralCode is not None:
             try:
                 code_obj = GeneratedCode.objects.get(code=referralCode)
-                if not code_obj.is_redeemed:
+                if code_obj.expiration_datetime and code_obj.expiration_datetime < timezone.now():
+                    code_obj.is_expired = True
+                    code_obj.save()
+                    disc = 0
+                elif not code_obj.is_redeemed:
                     disc = int(code_obj.percentage.strip('%'))
                 else:
                     disc = 0
@@ -230,8 +248,13 @@ def verifyReferralCode(request):
         context = {"discount": discount, "discount_percentage": 1000, "subscriptions": subscriptions, "referralCode":referralCode}       
         return render(request,"chooseSubscription.html",context)
     return HttpResponseBadRequest("Invalid request")
-        
+
+
+@login_required(login_url="/corporateLogin/")        
 def initiatePaymentRequest(request):
+    if not is_corporate_user(request.user):
+        return HttpResponseForbidden("Access forbidden for non-corporate users.")
+
     if request.method == 'POST' and request.user.is_corporate:
         user = request.user
         corporate = CorporateDB.objects.get(user=user)
@@ -352,6 +375,9 @@ def initiatePaymentRequest(request):
 
 @csrf_exempt
 def paymenthandler(request):
+    if not is_corporate_user(request.user):
+        return HttpResponseForbidden("Access forbidden for non-corporate users.")
+
     if request.method == "POST":
             razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
             razorpay_order_id = request.POST.get('razorpay_order_id', '')
@@ -410,8 +436,11 @@ def GenerateCode(request):
     else:
         return render(request, "Error.html")
     
-
+@login_required(login_url='/auth/loginuser/')
 def loanBooking(request):
+    if not is_customer(request.user):
+        return HttpResponseForbidden("Access forbidden for non-customer users.")
+
     if request.method == 'POST':
         customer = request.user
         name = request.POST.get('name')
@@ -420,15 +449,12 @@ def loanBooking(request):
         pincode = request.POST.get('pincode')
         phone = request.POST.get('phone')
         loan_type = request.POST.get('loanType')
+        monthly_salary= request.POST.get('monthlySalary')
+        loan_amount = request.POST.get('loanAmount')
         
         # Convert monthly_salary to Decimal
-        monthly_salary= request.POST.get('monthlySalary')
-        # monthly_salary = Decimal(monthly_salary_str) if monthly_salary_str else Decimal('0.00')
         monthly_salary = float(monthly_salary)
-        loan_amount = request.POST.get('loanAmount')
         loan_amount = float(loan_amount)
-        # Convert loan_amount to Decimal
-        # loan_amount = Decimal(loan_amount_str) if loan_amount_str else Decimal('0.00')
         
         loanType = LoanType.objects.get(name=loan_type)
         # Calculate the annual salary
@@ -436,12 +462,8 @@ def loanBooking(request):
             monthly_salary = Decimal(monthly_salary)
             year_salary = monthly_salary * 12
         except Exception as e:
-    # Handle the case where the provided monthly_salary is not a valid decimal
             year_salary = 0
-        
-        # print("appliocation start")
-        
-        # Create a new LoanDetail instance with the received data
+
         application = LoanDetail(
             customer=customer,
             name=name,
@@ -454,34 +476,36 @@ def loanBooking(request):
             year_salary=year_salary,
             loan_amount=loan_amount,
         )
-
-
         try:
-            application.save()  # Save the LoanDetail instance to the database
-            
+            application.save()
         except Exception as e:
             print(f"Error while saving data: {e}")
-            # Handle the exception, perhaps return an error response
+        return redirect ("userDashboard",'loan') 
+    return render(request, "home.html")
 
-        
-        return redirect ("home") # Redirect to a success page or URL
-    return render(request, "loanForm/loanForm.html")
-  ## currently adding loan only 
 
+
+@login_required(login_url='/auth/loginuser/')
 def personalLoan(request):
     return render(request, "loanForms/personalLoanForm.html")
 
+@login_required(login_url='/auth/loginuser/')
 def educationLoan(request):
     return render(request, "loanForms/educationLoanForm.html")
+
+@login_required(login_url='/auth/loginuser/')
 def homeLoan(request):
     return render(request, "loanForms/homeLoanForm.html")
 
+@login_required(login_url='/auth/loginuser/')
 def twoWheelerLoan(request):
     return render(request, "loanForms/twoWheelerLoanForm.html")
 
+@login_required(login_url='/auth/loginuser/')
 def carLoan(request):
     return render(request, "loanForms/carLoanForm.html")
 
+@login_required(login_url='/auth/loginuser/')
 def usedCarLoan(request):
     return render(request, "loanForms/usedCarLoanForm.html")
 
@@ -502,7 +526,12 @@ def subServices(request,sub):
 #         corporates = CorporateDB.objects.filter(profession=profession,is_active=True)
 #         return render(request, 'viewProviders.html', {"corporates": corporates ,'service': service})
 
+
+@login_required(login_url='/auth/loginuser/')
 def viewProviders(request):
+    if not is_customer(request.user):
+        return HttpResponseForbidden("Access forbidden for non-customer users.")
+
     if request.method == 'GET':
         service_name = request.GET.get('service_name')
         service_price = request.GET.get('service_price')
@@ -538,6 +567,9 @@ def userDashboard(request, page):
 
 @login_required(login_url="/auth/loginuser/")
 def bookAppointment(request):
+    if not is_customer(request.user):
+        return HttpResponseForbidden("Access forbidden for non-customer users.")
+    
     if request.method == 'POST' and request.user.is_customer:
         try:
             customer = request.user
@@ -583,6 +615,9 @@ def bookAppointment(request):
        
 @csrf_exempt
 def appointmentPaymentHandler(request):
+    if not is_customer(request.user):
+        return HttpResponseForbidden("Access forbidden for non-customer users.")
+
     if request.method == "POST":
             razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
             razorpay_order_id = request.POST.get('razorpay_order_id', '')
@@ -604,10 +639,8 @@ def appointmentPaymentHandler(request):
                     appointment.save()
                     thread, created = Thread.objects.get_or_create(appointment=appointment, customer=appointment.customer, corporate=appointment.corporate.user)
 
-                    # Optionally, you can add an initial chat message
                     initial_message = f"Appointment booked for {appointment.serviceType.name} with {appointment.corporate.businessName}."
                     ChatMessage.objects.create(thread=thread, sender=appointment.customer, message=initial_message)
-
 
                     appointmentPayment = AppointmentPayment.objects.create(
                         appointment=appointment,
