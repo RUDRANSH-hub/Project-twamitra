@@ -1,4 +1,5 @@
 # consumers.py
+from channels.exceptions import StopConsumer
 
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -81,6 +82,8 @@ class ChatConsumer(AsyncConsumer):
         user = self.scope['user']
         chat_room = f'user_chatroom_{user.id}'
         self.chat_room = chat_room
+        print("********************************")
+        print(chat_room)
         await self.channel_layer.group_add(
             chat_room,
             self.channel_name
@@ -89,6 +92,14 @@ class ChatConsumer(AsyncConsumer):
             'type': 'websocket.accept'
         })
 
+    async def websocket_disconnect(self, event):
+        print('disconnect', event)
+        await self.channel_layer.group_discard(
+        self.chat_room,
+        self.channel_name
+        )
+        raise StopConsumer()
+    
     async def websocket_receive(self, event):
         print('receive', event)
         received_data = json.loads(event['text'])
@@ -111,7 +122,7 @@ class ChatConsumer(AsyncConsumer):
         if not thread_obj:
             print('Error:: Thread id is incorrect')
 
-        is_valid = await self.check_thread_user(thread_obj,sent_by_user,send_to_user)
+        # is_valid = await self.check_thread_user(thread_obj,sent_by_user,send_to_user)
                 
         await self.create_chat_message(thread_obj, sent_by_user, msg)
 
@@ -141,8 +152,7 @@ class ChatConsumer(AsyncConsumer):
 
 
 
-    async def websocket_disconnect(self, event):
-        print('disconnect', event)
+
 
     async def chat_message(self, event):
         print('chat_message', event)

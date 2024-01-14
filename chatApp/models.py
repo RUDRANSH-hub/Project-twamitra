@@ -7,7 +7,7 @@ class ThreadManager(models.Manager):
     def by_user(self, **kwargs):
         user = kwargs.get('user')
         lookup = Q(customer=user) | Q(corporate=user)
-        qs = self.get_queryset().filter(lookup).distinct()
+        qs = self.get_queryset().filter(lookup).order_by('created_at').distinct()
         return qs
 
 
@@ -20,7 +20,7 @@ class Thread(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = ThreadManager()
-
+       
     def __str__(self):
         return f"Thread-{self.id}"
 
@@ -31,7 +31,7 @@ class ChatMessage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.sender.username} - {self.timestamp}"
+        return f"{self.sender.username} - {self.message} - {self.timestamp}"
 
     class Meta:
         ordering = ['timestamp']
