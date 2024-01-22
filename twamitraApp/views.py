@@ -282,6 +282,8 @@ def initiatePaymentRequest(request):
         print(type(None))
         print(type(referralCode))
         
+        context = {}
+        context['amount'] = amount
         amount = int(float(amount))*100
         currency = 'INR'
         data = { "amount": amount, "currency": currency}
@@ -289,13 +291,11 @@ def initiatePaymentRequest(request):
 
         razorpay_order_id = razorpay_order['id']
         callback_url = 'http://127.0.0.1:8000/payment-handler/'
-        context = {}
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
         context['currency'] = "INR"
         context['callback_url'] = callback_url
-        
         paymentObj = CorporatePayments.objects.create(
             amount = amount,
             cid=corporate,
@@ -483,8 +483,6 @@ def loanBooking(request):
         return redirect ("userDashboard",'loan') 
     return render(request, "home.html")
 
-
-
 @login_required(login_url='/auth/loginuser/')
 def personalLoan(request):
     return render(request, "loanForms/personalLoanForm.html")
@@ -505,6 +503,10 @@ def twoWheelerLoan(request):
 def carLoan(request):
     return render(request, "loanForms/carLoanForm.html")
 
+
+def loanPage(request):
+    return render(request, "loanPage.html")
+
 @login_required(login_url='/auth/loginuser/')
 def usedCarLoan(request):
     return render(request, "loanForms/usedCarLoanForm.html")
@@ -513,7 +515,7 @@ def consultantServices(request):
     return render(request, "consultantServices.html")
 
 def subServices(request,sub):
-    profession = Professions.objects.get(name=sub)
+    profession = Professions.objects.get(alias=sub)
     services = ServiceType.objects.filter(profession=profession)
     return render(request, "subServices.html", {"services":services, "profession":profession})
 
@@ -548,6 +550,22 @@ def viewProviders(request):
             print(corporate.profilePic)
         return render(request, 'viewProviders.html', {"corporates": corporates, 'service': service, 'locations': locations, 'location_filter': location_filter})
 
+
+@login_required(login_url="/auth/loginuser/")
+def providerDetails(request, cid):
+    if request.user.is_customer:
+        cid = cid
+        try:
+            corporate = CorporateDB.objects.get(cid=cid)
+        except:
+            messages.error(request, "Corporate doesn't exist")
+            return redirect("userDashboard.html",'service')
+        return render(request, 'providerDetails.html',{'corporate':corporate})
+    else:
+        messages.error(request, "You are not allowed here")
+        return redirect('corporateDashboard')
+                    
+
 @login_required(login_url="/auth/loginuser/")
 def userDashboard(request, page):
     if request.user.is_customer:
@@ -562,7 +580,7 @@ def userDashboard(request, page):
         print(context)
         return render(request, 'userDashboard.html', context)
     else:
-        messages.error(request,  "You are not allowed on this page.")
+        messages.error(request,  "You are not allowed to access that page.")
         return redirect('corporateDashboard')
 
 @login_required(login_url="/auth/loginuser/")
@@ -581,7 +599,8 @@ def bookAppointment(request):
                 return redirect(request.META.get('HTTP_REFERER', 'consultantServices'))
             serviceType = ServiceType.objects.get(name=service)
             corporate = CorporateDB.objects.get(cid=cid)
-            
+            context = {}
+            context['amount'] = int(serviceType.price)
             amount = int(serviceType.price)*100            
             currency = 'INR'
             data = { "amount": amount, "currency": currency, "notes":{"customer_id":customer.id}}
@@ -596,7 +615,6 @@ def bookAppointment(request):
             )
             
             callback_url = 'http://127.0.0.1:8000/appointmentPaymentHandler/'
-            context = {}
             context['razorpay_order_id'] = razorpay_order_id
             context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
             context['razorpay_amount'] = amount
@@ -606,10 +624,18 @@ def bookAppointment(request):
             return render(request, 'appointmentConfirmation.html',context)
         except Exception as e:
             print("here's an error", e)
-            messages.error(request,  "Something went wrong! Please try again!")
+            message = {
+            'status': 'error',
+            'message': 'Something went wrong! Please try again!'
+            }
+            messages.error(request,  message)
             return redirect('consultantServices')
     else:
-        messages.error(request,  "You are not allowed on this page.")
+        message = {
+            'status': 'error',
+            'message': 'You are not allowed on this page.'
+        }
+        messages.error(request,  message)
         return redirect('consultantServices')
 
        

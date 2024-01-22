@@ -15,7 +15,8 @@ class SubscriptionType(models.Model):
     
 class Professions(models.Model):
     name = models.CharField(max_length=255)
-    
+    alias = models.CharField(max_length=255)
+        
     def __str__(self) -> str:
         return self.name
 

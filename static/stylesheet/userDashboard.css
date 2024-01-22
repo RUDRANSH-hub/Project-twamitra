@@ -10,7 +10,6 @@
     height: 100%;
     color: var(--theme-light-color);
     transition: all 0.2s ease-in-out;
-    z-index: 6000;
 }
 .welcomeHead{
     text-align: center;
@@ -104,21 +103,59 @@
 
 .serviceItem{
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(2,1fr);
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    /* padding-bottom: 1rem; */
     border-bottom: 1px solid rgb(167, 167, 167);
+}
+.serviceName{
+    grid-column: 1/2;
+    grid-row: 1/2;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .serviceStatus{
+    grid-column: 2/3;
+        grid-row: 1/2;
+
     display: flex;
     align-items: center;
     margin-bottom: 0rem;
     padding-bottom: 0rem; 
     /* background-color: #4d81b5; */
 }
+.providerName{
+    display: inline;
+    grid-row: 2/3;
+    grid-column: 1/2;
+}
 .serviceStatus i{
     margin-inline: 0.4rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.viewDetails{
+        grid-row: 1/2;
+        display: flex;
+        align-items: center;
+    grid-column: 3/4;
+    
+}
+@media screen and (max-width:480px) {
+    .serviceItem{
+        grid-template-rows:auto;
+        grid-template-columns: 65% 35%;
+        margin-bottom: 0;
+    }
+    .viewDetails{
+        grid-row: 2/3;
+    grid-column: 2/3;
+    margin-left: 1rem;
+}
 }
 .fa-check{
     color: green;
@@ -218,11 +255,13 @@
 
     .serviceItem h4{
         font-size: 0.9rem;
+        padding-bottom: 0;
+        margin-bottom: 0;
     }
     .serviceItem{
         font-size: 0.7rem;
-        margin-bottom: 0.7rem;
-        padding-bottom: 0.7rem;
+        margin-bottom: 0.5rem;
+        /* padding-bottom: 0.7rem; */
 
     }
     .dropdown-button {
@@ -252,4 +291,9 @@
         text-align: center;
         grid-template-columns: repeat(1,1fr);
       }
+}
+
+
+.messages{
+    display: none;
 }

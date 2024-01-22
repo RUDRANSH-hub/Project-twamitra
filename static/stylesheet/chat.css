@@ -326,3 +326,16 @@
     /* margin-bottom: 50px; */
     display: none;
 }
+.noAppointments{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 30rem;
+    text-align: center;
+}
+.noAppointments img{
+    width: 6rem;
+    height: 6rem;
+    margin-bottom: 1rem;
+}

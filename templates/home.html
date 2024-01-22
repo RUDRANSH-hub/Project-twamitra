@@ -199,12 +199,12 @@
         <div class="trendingProducts">
             <ul>
                 <li data-aos="fade-up">
-                    <a href="#">
+                    <a href="{% url 'subServices' 'CA' %}">
                         <div class="card">
-                            <img src="{% static 'img/creditCard.jpg' %}"
+                            <img src="{% static 'img/chartedAccountant.jpg' %}"
                                 class="card-img-top" alt="Fissure in Sandstone" />
                             <div class="card-body">
-                                <h5 class="card-title">Credit Cards</h5>
+                                <h5 class="card-title">Charted Accountant</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up
                                     the bulk of the card's content.</p>
                             </div>
@@ -212,7 +212,7 @@
                     </a>
                 </li>
                 <li data-aos="fade-up">
-                    <a href="#">
+                    <a href="{% url 'personalLoan' %}">
                         <div class="card">
                             <img src="{% static 'img/quickPersonalLoan.jpg' %}"
                                 class="card-img-top" alt="Fissure in Sandstone" />
@@ -225,12 +225,12 @@
                     </a>
                 </li>
                 <li data-aos="fade-up">
-                    <a href="#">
+                    <a href="{% url 'subServices' 'DSA' %}">
                         <div class="card">
                             <img src="{% static 'img/freeCreditScore.jpg' %}"
                                 class="card-img-top" alt="Fissure in Sandstone" />
                             <div class="card-body">
-                                <h5 class="card-title">Free Credit Score</h5>
+                                <h5 class="card-title">Direct Selling Agent</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up
                                     the bulk of the card's content.</p>
                             </div>
@@ -238,12 +238,12 @@
                     </a>
                 </li>
                 <li data-aos="fade-up">
-                    <a href="#">
+                    <a href="{% url 'educationLoan' %}">
                         <div class="card">
-                            <img src="{% static 'img/financeCalculator.jpg' %}"
+                            <img src="{% static 'img/educationLoan.jpg' %}"
                                 class="card-img-top" alt="Fissure in Sandstone" />
                             <div class="card-body">
-                                <h5 class="card-title">Finance Calculators</h5>
+                                <h5 class="card-title">Education Loan</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up
                                     the bulk of the card's content.</p>
                             </div>
@@ -251,12 +251,12 @@
                     </a>
                 </li>
                 <li data-aos="fade-up">
-                    <a href="#">
+                    <a href="{% url 'subServices' 'DSA' %}">
                         <div class="card">
-                            <img src="{% static 'img/personalFinance.jpg' %}"
+                            <img src="https://img.freepik.com/free-vector/construction-architect-concept-illustration_114360-9700.jpg?w=900&t=st=1705929423~exp=1705930023~hmac=4685f953d660c4b31c226f85877d8dd6db6441d7773d8aaf7e67430ea6d8015d"
                                 class="card-img-top" alt="Fissure in Sandstone" />
                             <div class="card-body">
-                                <h5 class="card-title">Personal Finance</h5>
+                                <h5 class="card-title">Architect</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up
                                     the bulk of the card's content.</p>
                             </div>
@@ -264,7 +264,7 @@
                     </a>
                 </li>
                 <li data-aos="fade-up">
-                    <a href="#">
+                    <a href="{% url 'homeLoan' %}">
                         <div class="card">
                             <img src="{% static 'img/homeLoan.jpg' %}"
                                 class="card-img-top" alt="Fissure in Sandstone" />
@@ -305,8 +305,10 @@
             </ul>
         </div>
         <div class="whyBtn">
-            <button class="btn btn-primary" >Get Started</button>
+            <button class="btn btn-primary" onclick="snack()">Get Started</button>
         </div>
     </div>
 </div>
+
+
 {% endblock %}

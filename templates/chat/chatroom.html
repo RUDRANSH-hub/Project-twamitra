@@ -16,33 +16,44 @@
         <div class="closeChat" onclick="closeChat()">
             <i class="fas fa-angle-down"></i>
         </div>
-        <ul class="chats" onclick="showSpecificChat(event)">
-            {% for thread in threads %}
-            <li class="chatDetials" chat-id="chat_{{ thread.id }}">
-                <a href="#">
-                    <img src="https://st.depositphotos.com/1008939/2240/i/450/depositphotos_22408839-stock-photo-serious.jpg"
-                        alt="">
-                    <div class="chatContent">
+        {% if threads.count == 0 %}
+            <div class="noAppointments">
+                <img src="{% static 'img/noAppointments.png' %}" alt="">
+                <h5>You Don't have any appointments yet.</h5>
+            </div>
+        {% else %}
+            <ul class="chats" onclick="showSpecificChat(event)">
+                {% for thread in threads %}
+                <li class="chatDetials" chat-id="chat_{{ thread.id }}">
+                    <a href="#">
                         {% if thread.customer == request.user %}
-                        <p class="chatName"><b>{{thread.corporate.name}}</b></p>
+                        <img src="{{ thread.corporate.corporatedb.profilePic.url }}" alt="">
                         {% else %}
-                        <p class="chatName"><b>{{thread.customer}}</b></p>
+                        <img src="https://st.depositphotos.com/1008939/2240/i/450/depositphotos_22408839-stock-photo-serious.jpg" alt="">
                         {% endif %}
-                        
-                        {% with last_message=thread|get_last_message %}
-                        {% if last_message %}
-                            <p class="chatLastMsg">{{ last_message.message }}</p>
-                        {% endif %}
-                    {% endwith %}
-                        
-                    </div>
-                    <div class="newMsg">
-                        <i class="fas fa-circle"></i>
-                    </div>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
+                            <div class="chatContent">
+                            {% if thread.customer == request.user %}
+                            <p class="chatName"><b>{{thread.corporate.name}}</b></p>
+                            {% else %}
+                            <p class="chatName"><b>{{thread.customer}}</b></p>
+                            {% endif %}
+                            
+                            {% with last_message=thread|get_last_message %}
+                            {% if last_message %}
+                                <p class="chatLastMsg">{{ last_message.message }}</p>
+                            {% endif %}
+                        {% endwith %}
+                            
+                        </div>
+                        <div class="newMsg">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
     </div>
     {% for thread in threads %}
     <div class="specificChat hide" chat-id="chat_{{ thread.id }}" other-user-id="

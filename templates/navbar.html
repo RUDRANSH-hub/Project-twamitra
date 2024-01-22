@@ -14,13 +14,13 @@
         <div class="navbar__menu">
             <ul class="navbar__list">
                 <li class="navbar__list-drop">
-                    <a href="#">
+                    <a href="{% url 'loanPage' %}">
                         Loan Mitra
-                        <svg class="arrow" width="10" height="6" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <svg class="arrow" width="10" height="6" xmlns="http://www.w3.org/2000/svg">
                             <path stroke="#fff" stroke-width="1.5" fill="none" d="m1 1 4 4 4-4" />
-                        </svg>
+                        </svg> -->
                     </a>
-                    <ul class="navbar__list-drop-menu">
+                    <!-- <ul class="navbar__list-drop-menu">
                         <li><a href="{% url 'personalLoan' %}">
                                 <i class="fas fa-user"></i>
                                 <span>Personal</span>
@@ -51,7 +51,7 @@
                                 <span>Two wheeler</span>
                             </a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </li>
                 <li class="navbar__list-drop">
                     <a href="{% url 'consultantServices' %}">Consultant Mitra

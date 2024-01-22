@@ -7,6 +7,7 @@ urlpatterns = [
     path("dashboard/<str:page>/", views.userDashboard, name="userDashboard"),
     path("save_generated_code/", views.GenerateCode, name="codegeneration"),
     path("loanBooking/",views.loanBooking,name="loanBooking"),
+    path("loanPage/",views.loanPage,name="loanPage"),
     path("payment-handler/",views.paymenthandler,name="paymenthandler"),
     path("carLoan/",views.carLoan,name="carLoan"),
     path("personalLoan/",views.personalLoan,name="personalLoan"),
@@ -24,6 +25,7 @@ urlpatterns = [
     path("initiatePaymentRequest/",views.initiatePaymentRequest,name="initiatePaymentRequest"),
     path("corporateProfileForm/",views.corporateProfileForm,name="corporateProfileForm"),
     path("viewProviders/",views.viewProviders,name="viewProviders"),
+    path("providerDetails/<str:cid>/",views.providerDetails,name="providerDetails"),
     path("bookAppointment/",views.bookAppointment,name="bookAppointment"),
     path("appointmentPaymentHandler/",views.appointmentPaymentHandler,name="appointmentPaymentHandler")
 ]
