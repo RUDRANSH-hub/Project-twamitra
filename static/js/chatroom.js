@@ -22,7 +22,7 @@ if(loc.protocol === 'https') {
 }
 // let endpoint = `${wsStart}${loc.host}/ws/chat/`
 
-let endpoint = "ws://twamitra.onrender.com//ws/chat/""
+let endpoint = "ws://twamitra.onrender.com//ws/chat/"
 
 const socket = new WebSocket(endpoint);
 
