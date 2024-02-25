@@ -22,3 +22,4 @@ tzdata==2023.3
 urllib3==2.1.0
 django_recaptcha
 channels
+django-channels
