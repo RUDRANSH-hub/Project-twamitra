@@ -177,7 +177,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
 # STATICFILES_DIRS = [ BASE_DIR / 'static']
 # STATIC_ROOT =  BASE_DIR / 'static/'
 
@@ -200,13 +199,15 @@ RAZOR_KEY_ID = 'rzp_test_uyZ3f8nCMwpNY6'
 RAZOR_KEY_SECRET = 'JsAv3yVNM7VOOTKB7MDsLigo'
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        # 'CONFIG': {
-        #     'hosts': [('127.0.0.1', 6379)],
-        # }
+   'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://red-cndmajacn0vc73f7bf6g:6379/',  # URI of your Redis instance
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
+
 
 RECAPTCHA_SITE_KEY = '6LdN5VgpAAAAAKtNUFPtyaA5RIkuwSSmQl11_emT'
 RECAPTCHA_SECRET_KEY = '6LdN5VgpAAAAAMJGB93ac2iIp1tFTkG2J_-K-YHK'
