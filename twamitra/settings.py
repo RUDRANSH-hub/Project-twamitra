@@ -201,7 +201,7 @@ RAZOR_KEY_SECRET = 'JsAv3yVNM7VOOTKB7MDsLigo'
 CHANNEL_LAYERS = {
    'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://red-cndmajacn0vc73f7bf6g:6379/',  # URI of your Redis instance
+        'LOCATION': 'redis://red-cndmajacn0vc73f7bf6g:6379/1',  # URI of your Redis instance
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
