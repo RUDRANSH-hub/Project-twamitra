@@ -199,14 +199,20 @@ RAZOR_KEY_ID = 'rzp_test_uyZ3f8nCMwpNY6'
 RAZOR_KEY_SECRET = 'JsAv3yVNM7VOOTKB7MDsLigo'
 
 # Configure Redis as the Channel layer
+# settings.py
+
+# Configure Redis as the Channel layer
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis_host', 6379)],
+            "hosts": [('redis-11e44a76-rudranshofficial123-73ce.a.aivencloud.com', 27359)],
+            "password": "AVNS_RBG-nfeoVoVdAx1LhtF",
+            "ssl": True,  # Enable SSL
         },
     },
 }
+
 
 
 
