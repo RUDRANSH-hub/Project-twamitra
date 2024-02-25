@@ -52,6 +52,7 @@ ACCOUNT_SIGNUP_REDIRECT_URL = "/dashboard/loan"
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,6 +72,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    
+
 ]
 
 MIDDLEWARE = [
