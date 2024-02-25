@@ -24,3 +24,4 @@ django_recaptcha
 channels>=2.4,<3
 django-channels
 django-redis
+gunicorn
